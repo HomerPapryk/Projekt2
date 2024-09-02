@@ -1,0 +1,929 @@
+/* Definicje zmiennych kolorystycznych */
+:root {
+  --background-light: #f4f4f4;
+  --text-light: #333;
+  --header-background-light: #ffffff;
+  --border-light: #ddd;
+  --box-background-light: #000000;
+  --box-text-light: #ffffff;
+  --transaction-background-light: #ffffff;
+  --transaction-border-light: #ddd;
+  --footer-background-light: #ffffff;
+  --nav-button-light: #333;
+  --key-background-light: #f0f0f0;
+  --key-hover-light: #e0e0e0;
+  --key-active-light: #000000;
+  --modal-background-light: #fff;
+  --modal-button-light: #000;
+  --wallet-button-active-light: #000;
+  --transaction-type-active-light: #000;
+  --date-item-selected-light: #000;
+
+  --background-dark: #121212;
+  --text-dark: #ffffff;
+  --header-background-dark: #1f1f1f;
+  --border-dark: #333;
+  --box-background-dark: #1e1e1e;
+  --box-text-dark: #ffffff;
+  --transaction-background-dark: #1e1e1e;
+  --transaction-border-dark: #333;
+  --footer-background-dark: #333333;
+  --nav-button-dark: #ffffff;
+  --key-background-dark: #333;
+  --key-hover-dark: #444;
+  --key-active-dark: #ffffff;
+  --modal-background-dark: #1e1e1e;
+  --modal-button-dark: #333;
+  --wallet-button-active-dark: #333;
+  --transaction-type-active-dark: #333;
+  --date-item-selected-dark: #333;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-light);
+  color: var(--text-light);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode {
+  background-color: var(--background-dark);
+  color: var(--text-dark);
+}
+
+/* Stylizacja nagłówka */
+.app-header {
+  background-color: var(--header-background-light);
+  border-bottom: 1px solid var(--border-light);
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+body.dark-mode .app-header {
+  background-color: var(--header-background-dark);
+  border-bottom: 1px solid var(--border-dark);
+}
+
+/* Stylizacja sekcji balance */
+.balance-box {
+  background-color: var(--box-background-light);
+  color: var(--box-text-light);
+  border: 1px solid var(--border-light);
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+body.dark-mode .balance-box {
+  background-color: var(--box-background-dark);
+  color: var(--box-text-dark);
+  border: 1px solid var(--border-dark);
+}
+
+/* Stylizacja listy transakcji */
+
+.transaction-list-container {
+  max-height: 400px; /* Ustal maksymalną wysokość kontenera listy */
+  overflow-y: auto; /* Dodaj przewijanie w pionie */
+  padding-right: 10px; /* Dodatkowy padding dla estetyki */
+}
+.transaction-list li {
+  background-color: var(--transaction-background-light);
+  border: 1px solid var(--transaction-border-light);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+body.dark-mode .transaction-list li {
+  background-color: var(--transaction-background-dark);
+  border: 1px solid var(--transaction-border-dark);
+}
+
+/* Stylizacja stopki */
+.app-footer {
+  background-color: var(--footer-background-light);
+  border-top: 1px solid var(--border-light);
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+body.dark-mode .app-footer {
+  background-color: var(--footer-background-dark);
+  border-top: 1px solid var(--border-dark);
+}
+
+/* Stylizacja przycisków nawigacyjnych */
+.nav-button {
+  color: var(--nav-button-light);
+  transition: color 0.3s;
+}
+
+body.dark-mode .nav-button {
+  color: var(--nav-button-dark);
+}
+
+/* ikony */
+
+.transaction-details .icon {
+  width: 10px;
+  height: 10px;
+  display: block; /* Upewnia się, że ikony są wyświetlane */
+  opacity: 1; /* Upewnia się, że ikony są widoczne */
+  position: static; /* Upewnia się, że pozycjonowanie jest właściwe */
+}
+
+/* Klawiatura */
+body.dark-mode .key {
+  background-color: #444;
+  color: #ffffff;
+}
+
+body.dark-mode .transaction-date-header {
+  font-weight: bold;
+  margin: 15px 0 5px 0;
+  padding: 5px;
+  background-color: #535353; /* lub inny kolor pasujący do strony */
+  border-radius: 5px;
+}
+
+body.dark-mode .key:last-child {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Kwota */
+body.dark-mode .amount-display {
+  color: #ffffff;
+}
+
+/* Wybór ikony i opis */
+body.dark-mode .transaction-info select,
+body.dark-mode #transaction-description {
+  background-color: #333;
+  color: #ffffff;
+  border: 1px solid #555;
+}
+
+/* Stylizacja przycisku dodaj */
+body.dark-mode .modal-button {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Napis income */
+body.dark-mode .transaction-type-switch button:not(.active) {
+  color: #777;
+}
+
+/* Przyciski zamknięcia (X) */
+body.dark-mode .close-btn {
+  color: #ffffff;
+}
+
+/* Napis w portfelu */
+body.dark-mode .wallet-type-switch button:not(.active),
+body.dark-mode .transaction-type-switch button:not(.active) {
+  color: #999;
+}
+
+/* Stylizacja modala */
+.modal-content {
+  background-color: var(--modal-background-light);
+  transition: background-color 0.3s;
+}
+
+body.dark-mode .modal-content {
+  background-color: var(--modal-background-dark);
+}
+
+/* Stylizacja przycisków w modalu */
+.modal-button {
+  background-color: var(--modal-button-light);
+  color: var(--text-light);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode .modal-button {
+  background-color: var(--modal-button-dark);
+  color: var(--text-dark);
+}
+
+/* Stylizacja przycisków klawiatury */
+.key {
+  background-color: var(--key-background-light);
+  transition: background-color 0.3s;
+}
+
+.key:hover {
+  background-color: var(--key-hover-light);
+}
+
+body.dark-mode .key {
+  background-color: var(--key-background-dark);
+}
+
+body.dark-mode .key:hover {
+  background-color: var(--key-hover-dark);
+}
+
+body.dark-mode .key:last-child {
+  background-color: var(--key-active-dark);
+  color: var(#939393);
+}
+
+/* Stylizacja aktywnego portfela */
+.wallet-button.active {
+  background-color: var(--wallet-button-active-light);
+  color: var(--text-light);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode .wallet-button.active {
+  background-color: var(--wallet-button-active-dark);
+  color: var(--text-dark);
+}
+
+/* Stylizacja aktywnego typu transakcji */
+.transaction-type-switch button.active {
+  background-color: var(--transaction-type-active-light);
+  color: var(--text-light);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode .transaction-type-switch button.active {
+  background-color: var(--transaction-type-active-dark);
+  color: var(--text-dark);
+}
+
+/* Stylizacja wybranej daty */
+.date-item.selected {
+  background-color: var(--date-item-selected-light);
+  color: var(--text-light);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode .date-item.selected {
+  background-color: var(--date-item-selected-dark);
+  color: var(--text-dark);
+}
+
+/* Styl dla ciemnego trybu */
+.dark-mode .app-footer {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+.dark-mode .app-footer .nav-button {
+  color: #ffffff;
+}
+
+.dark-mode .nav-button.large {
+  background-color: #ffffff; /* Czarne tło w trybie ciemnym */
+  color: #000000; /* Białe tekst/ikona w trybie ciemnym */
+  padding: 15px;
+  font-size: 2rem;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.header-center h1 {
+  font-size: 1.2rem;
+  font-weight: normal;
+  margin: 0;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.balance-section {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  background-color: #fff; /* Zapewnia kontrast z tłem */
+  border-radius: 5px; /* Zaokrąglenie krawędzi dla lepszego wyglądu */
+  margin-bottom: 10px;
+}
+
+.transaction-date-header {
+  font-weight: bold;
+  margin: 15px 0 5px 0;
+  padding: 5px;
+  background-color: #f0f0f0; /* lub inny kolor pasujący do strony */
+  border-radius: 5px;
+}
+
+.transaction-details {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.transaction-amount {
+  margin-left: auto;
+  padding-right: 100px;
+}
+
+.balance-box {
+  background-color: #000000;
+  color: #ffffff;
+  padding: 20px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  font-size: 2rem;
+  margin: 10px;
+}
+
+#balance-message,
+#wallet-message {
+  margin-top: 10px;
+  font-size: 1rem;
+}
+
+.transaction-section {
+  padding: 20px;
+}
+
+.transaction-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.transaction-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-list li .actions {
+  display: flex;
+  gap: 10px;
+}
+
+.transaction-list .icon {
+  width: 50px;
+  height: 50px;
+}
+
+.transaction-date-header {
+  font-weight: bold;
+  margin: 15px 0 5px 0;
+  padding: 5px;
+  background-color: #f0f0f0; /* lub inny kolor pasujący do strony */
+  border-radius: 5px;
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.transaction-details {
+  display: flex;
+  align-items: center;
+}
+
+.transaction-info {
+  margin-left: 10px;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
+.transaction-amount {
+  margin-left: auto;
+  padding-right: 10px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.transaction-date-header {
+  font-weight: bold;
+  margin: 15px 0 5px 0;
+  padding: 5px;
+  background-color: #f0f0f0; /* lub inny kolor pasujący do strony */
+  border-radius: 5px;
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.transaction-details {
+  display: flex;
+  align-items: center;
+}
+
+.transaction-info {
+  margin-left: 10px;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
+.transaction-amount {
+  margin-left: auto;
+  padding-right: 10px;
+}
+
+#transaction-description {
+  width: 50%; /* Szerokość na całe dostępne miejsce */
+  padding: 5px; /* Wewnętrzne odstępy, aby tekst nie był blisko krawędzi */
+  font-size: 0.9rem; /* Wielkość czcionki */
+  border-radius: 5px; /* Zaokrąglenie rogów */
+  border: 1px solid #000000; /* Kolor i grubość obramowania */
+  box-sizing: border-box; /* Zapewnia, że padding nie zwiększa szerokości elementu */
+}
+
+.chart-page,
+.settings-page,
+.wallet-page {
+  padding: 20px;
+}
+
+.app-footer {
+  background-color: #ffffff;
+  border-top: 1px solid #ddd;
+  padding: 10px 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.footer-nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.nav-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 1.5rem;
+  transition: color 0.3s ease;
+}
+
+.mover {
+  position: relative;
+  width: 30px;
+  height: 30px;
+}
+
+.icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  opacity: 0; /* Domyślnie ukryjemy obie ikony */
+}
+
+.sun {
+  opacity: 1; /* Ikona słońca będzie domyślnie widoczna */
+  transform: translateY(0);
+}
+
+.moon {
+  transform: translateY(-42px);
+}
+
+body.dark-mode .sun {
+  transform: translateY(42px);
+  opacity: 0;
+}
+
+body.dark-mode .moon {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+body.dark-mode .nav-button {
+  color: var(--nav-button-dark, #ffffff);
+}
+
+.nav-button.large {
+  background-color: #000;
+  color: #ffffff;
+  padding: 15px;
+  font-size: 2rem;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+}
+
+.amount-display {
+  font-size: 2.5rem;
+  margin: 20px 0;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  color: #000;
+  text-align: center;
+  width: 100%;
+}
+
+.keyboard {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Trzy kolumny */
+  gap: 10px;
+  margin-top: 20px;
+  width: 100%; /* Przyciski zajmują pełną szerokość modala */
+}
+
+.keyboard .key {
+  font-size: 1.5rem; /* Rozmiar czcionki przycisków */
+  padding: 15px 0; /* Padding wewnętrzny przycisków */
+  text-align: center;
+  background-color: #f0f0f0;
+  border-radius: 50%; /* Zaokrąglenie przycisków */
+  user-select: none;
+}
+.key {
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.key:hover {
+  background-color: #e0e0e0;
+}
+
+.key:last-child {
+  background-color: #000;
+  color: #fff;
+}
+
+.transaction-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.transaction-info img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Przezroczyste tło */
+  z-index: 1000;
+  display: none; /* Ukryj modal */
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto; /* Przewijanie w przypadku długiej zawartości */
+}
+.modal-button {
+  background-color: #000;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  text-align: center;
+}
+
+.modal-button:hover {
+  background-color: #333;
+}
+
+#currency-symbol {
+  margin-right: 10px; /* Odstęp po prawej stronie symbolu waluty */
+}
+
+#transaction-icon option {
+  display: flex;
+  align-items: center;
+}
+
+#transaction-icon option img {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transform: scale(0.9); /* Początkowy rozmiar */
+  opacity: 0; /* Początkowa przezroczystość */
+}
+.modal.show .modal-content {
+  transform: scale(1); /* Powiększenie do pełnego rozmiaru */
+  opacity: 1; /* Ustawienie pełnej przezroczystości */
+}
+/* Styl dla przycisku zamknięcia */
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 2rem; /* Zwiększenie rozmiaru czcionki */
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  transition: color 0.3s ease;
+}
+/* Ulepszenie przycisku zamknięcia na urządzeniach mobilnych */
+.close-btn:hover {
+  color: #000; /* Ciemniejszy kolor przy najechaniu */
+}
+
+/* portfel buttons */
+
+.wallet-type-switch {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.wallet-button {
+  background-color: transparent;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 20px;
+  margin: 0 10px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.wallet-button.active {
+  background-color: #000;
+  color: #fff;
+}
+
+.wallet-button:hover {
+  background-color: #000000;
+  color: #fff;
+}
+
+/* Nagłówki expenses / income */
+.transaction-type-switch {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.transaction-type-switch button {
+  background-color: transparent;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 20px;
+  margin: 0 10px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.transaction-type-switch button.active {
+  background-color: #000;
+  color: #fff;
+}
+
+/* Wybór daty */
+.date-selector {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.date-item {
+  font-size: 1rem;
+  text-align: center;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.date-item.selected {
+  background-color: #000;
+  color: #fff;
+}
+
+/* Kwota */
+.amount-display {
+  font-size: 2.5rem;
+  margin: 20px 0;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  color: #000;
+  text-align: center;
+  width: 100%;
+}
+
+/* Wybór ikony i opis */
+.transaction-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.transaction-info select {
+  margin-right: 10px;
+  padding: 5px;
+}
+
+.keyboard {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Trzy kolumny */
+  gap: 10px;
+  width: 100%;
+  max-width: 400px; /* Maksymalna szerokość klawiatury */
+  margin: 0 auto;
+}
+
+.keyboard .key {
+  background-color: #f0f0f0;
+  padding: 15px 0;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  height: 80px; /* Stała wysokość dla klawiszy */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.key:last-child {
+  background-color: #000;
+  color: #fff;
+}
+
+#chart-legend {
+  margin-top: 16px;
+  text-align: center;
+}
+
+#chart-legend div {
+  display: inline-flex;
+  align-items: center;
+  margin: 4px;
+}
+
+#chart-legend img {
+  vertical-align: middle;
+}
+
+body.dark-mode #chart-legend img {
+  filter: brightness(0) invert(1); /* Użycie filtra CSS, który zmienia kolor na biały */
+}
+
+body.dark-mode #icon-preview {
+  filter: brightness(0) invert(1);
+}
+
+.chart-section {
+  display: flex;
+  flex-direction: column; /* Domyślnie kolumny dla małych ekranów */
+  align-items: center; /* Centrowanie zawartości */
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  margin: 20px 0; /* Margines dookoła sekcji wykresu */
+}
+
+.chart-container {
+  width: 100%;
+  max-width: 600px; /* Maksymalna szerokość wykresu */
+  margin: 0 auto; /* Wyśrodkowanie wykresu */
+}
+
+#chart-legend {
+  margin-top: 16px; /* Margines nad legendą */
+  text-align: center;
+}
+
+#chart-legend div {
+  display: flex;
+  align-items: center;
+  margin: 4px auto; /* Wyśrodkowanie elementów legendy */
+}
+
+#chart-legend img {
+  vertical-align: middle;
+}
+
+/* Media Query dla większych ekranów */
+@media (min-width: 1024px) {
+  .chart-section {
+    flex-direction: row; /* Rzędy dla większych ekranów */
+    align-items: flex-start; /* Dopasowanie do góry */
+    justify-content: space-between; /* Rozstawienie wykresu i legendy */
+    text-align: left; /* Tekst wyrównany do lewej */
+  }
+
+  .chart-container {
+    width: 60%; /* Wykres zajmuje 60% szerokości */
+    max-width: none; /* Usunięcie ograniczenia szerokości */
+  }
+
+  #chart-legend {
+    margin-top: 0; /* Usunięcie górnego marginesu */
+    width: 35%; /* Legenda zajmuje 35% szerokości */
+    margin-left: 20px; /* Margines z lewej strony legendy */
+    text-align: left; /* Wyrównanie tekstu legendy do lewej */
+  }
+}
+
+/* Dostosowanie dla mniejszych ekranów */
+@media (max-width: 375px) {
+  .keyboard {
+    max-width: 90%;
+  }
+
+  .keyboard .key {
+    font-size: 1.2rem;
+    height: 60px; /* Zmniejszenie wysokości klawiszy na mniejszych ekranach */
+  }
+}
+
+/* Dostosowanie dla większych ekranów */
+@media (min-width: 768px) {
+  .keyboard {
+    max-width: 450px; /* Zwiększenie szerokości klawiatury na większych ekranach */
+  }
+
+  .keyboard .key {
+    font-size: 1.8rem;
+  }
+}

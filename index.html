@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="app">
+      <!-- Strona Główna -->
+      <div id="home-page" class="page active">
+        <header class="app-header">
+          <div class="header-center">
+            <h1>Dashboard</h1>
+          </div>
+          <div class="header-right">
+            <img
+              src="Avatar/woman-6466907_640.jpg"
+              alt="User Avatar"
+              class="avatar"
+            />
+          </div>
+        </header>
+
+        <main>
+          <section class="balance-section">
+            <div class="balance-box">
+              <span id="total-balance">0 PLN</span>
+              <p id="balance-message">Możesz jeszcze wydać 0 złotych</p>
+            </div>
+          </section>
+
+          <section class="transaction-section">
+            <ul id="transaction-list" class="transaction-list">
+            </ul>
+          </section>
+        </main>
+      </div>
+
+      <!-- Sekcja Portfel -->
+      <div id="wallet-page" class="page">
+        <header class="app-header">
+          <div class="header-center">
+            <h1>Portfel</h1>
+          </div>
+          <div class="header-right">
+            <img
+              src="Avatar/woman-6466907_640.jpg"
+              alt="User Avatar"
+              class="avatar"
+            />
+          </div>
+        </header>
+
+        <main>
+          <section class="balance-section">
+            <div class="balance-box">
+              <span id="wallet-balance">0 PLN</span>
+              <p id="wallet-message">Wybierz kategorię</p>
+            </div>
+          </section>
+
+          <!-- Zakładki w sekcji Portfel -->
+          <div class="wallet-type-switch">
+            <button class="wallet-button active" id="expense-button" onclick="filterTransactions('expense')">Wydatki</button>
+            <button class="wallet-button" id="income-button" onclick="filterTransactions('income')">Przychód</button>
+            <button class="wallet-button" id="all-button" onclick="filterTransactions('all')">Zobacz wszystkie</button>
+          </div>
+
+          <ul id="wallet-transaction-list" class="transaction-list">
+            <!-- Przychody i wydatki będą dodawane dynamicznie -->
+          </ul>
+        </main>
+      </div>
+
+   <!-- Sekcja Wykresy -->
+<div id="chart-page" class="page">
+  <header class="app-header">
+    <div class="header-center">
+      <h1>Wykresy</h1>
+    </div>
+    <div class="header-right">
+      <img src="Avatar/woman-6466907_640.jpg" alt="User Avatar" class="avatar" />
+    </div>
+  </header>
+
+  <main>
+    <section class="balance-section">
+      <div class="balance-box">
+        <span id="chart-balance">0 PLN</span>
+      </div>
+    </section>
+
+    <section class="chart-section">
+      <h3>Wykres wydatków</h3>
+      <div class="chart-container">
+        <canvas id="expense-chart"></canvas>
+      </div>
+      <div id="chart-legend"></div> <!-- Kontener na legendę -->
+    </section>
+  </main>
+</div>
+
+<footer class="app-footer">
+  <nav class="footer-nav">
+    <button class="nav-button" onclick="navigateTo('home')">
+      <i class="fas fa-home"></i>
+    </button>
+    <button class="nav-button" onclick="navigateTo('wallet')">
+      <i class="fas fa-wallet"></i>
+    </button>
+    <button class="nav-button large" onclick="showAddTransactionModal()">
+      <i class="fas fa-plus"></i>
+    </button>
+    <button class="nav-button" onclick="navigateTo('chart')">
+      <i class="fas fa-chart-pie"></i>
+    </button>
+    <!-- Tutaj dodamy przycisk do przełączania trybu -->
+    <button class="nav-button" id="toggle-button" onclick="switcher()">
+      <div class="mover">
+        <svg class="icon sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="icon moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </div>
+    </button>
+  </nav>
+</footer>
+
+      <div id="transaction-modal" class="modal">
+        <div class="modal-content">
+          <span class="close-btn" onclick="closeTransactionModal()">&times;</span> <!-- Przycisk zamknięcia -->
+      
+          <!-- Nagłówki expenses / income -->
+          <div class="transaction-type-switch">
+            <button id="modal-expenses-button" class="active">expenses</button>
+            <button id="modal-income-button">income</button>
+          </div>
+      
+          <!-- Wybór daty -->
+          <div class="date-selector" id="date-selector">
+            <!-- Daty będą generowane dynamicznie -->
+          </div>
+           <!-- Ukryte pole do przechowywania indeksu edytowanej transakcji -->
+    <input type="hidden" id="edit-index" value="">
+      
+          <!-- Kwota -->
+          <div class="amount-display">
+            <span id="currency-symbol">PLN</span>
+            <span id="transaction-amount-display">0.00</span>
+          </div>
+      
+          <!-- Wybór ikony i opis -->
+          <div class="transaction-info">
+            <img id="icon-preview" src="Iconsexpenses/Jedzenie.svg" alt="Ikona" style="width:30px; height:30px; vertical-align:middle;">
+            <select id="transaction-icon">
+                <!-- Opcje ikon będą generowane dynamicznie przez JS -->
+            </select>
+            <input type="text" id="transaction-description" placeholder="Opis" />
+          </div>
+      
+          <!-- Klawiatura numeryczna -->
+          <div class="keyboard">
+            <div class="key">1</div>
+            <div class="key">2</div>
+            <div class="key">3</div>
+            <div class="key">4</div>
+            <div class="key">5</div>
+            <div class="key">6</div>
+            <div class="key">7</div>
+            <div class="key">8</div>
+            <div class="key">9</div>
+            <div class="key">0</div>
+            <div class="key">.</div>
+            <div class="key">&#10004;</div>
+          </div>
+        </div>
+      </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
