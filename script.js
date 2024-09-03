@@ -53,7 +53,7 @@ function showAddTransactionModal(isNewTransaction = true) {
   modal.style.display = "flex";
 
   if (isNewTransaction) {
-    document.getElementById("transaction-amount-display").innerText = "0.00"; // Reset amount display tylko dla nowych transakcji
+    document.getElementById("transaction-amount-display").innerText = "0.00";
   }
 
   setTimeout(() => {
@@ -71,7 +71,6 @@ function closeTransactionModal() {
     app.classList.remove("blur");
   }, 300);
 }
-
 function toggleTransactionType(type) {
   const expensesButton = document.getElementById("modal-expenses-button");
   const incomeButton = document.getElementById("modal-income-button");
@@ -152,28 +151,35 @@ function addTransaction() {
   const description =
     document.getElementById("transaction-description").value || "Bez opisu";
   const date = document.querySelector(".date-item.selected").textContent;
+  const editIndex = document.getElementById("edit-index").value;
 
-  transactions.push({
+  const transactionData = {
     amount: amount.toFixed(2),
     type: type,
     icon: icon,
     description: description,
     date: date,
-  });
+  };
+
+  if (editIndex !== "") {
+    transactions[editIndex] = transactionData;
+  } else {
+    transactions.push(transactionData);
+  }
 
   updateUI();
   closeTransactionModal();
+  document.getElementById("edit-index").value = "";
 }
 
 function updateUI() {
   const transactionList = document.getElementById("transaction-list");
   transactionList.innerHTML = "";
 
-  // Sortowanie transakcji od najnowszej do najstarszej
   const sortedTransactions = transactions.sort((a, b) => {
     const dateA = new Date(a.date);
     const dateB = new Date(b.date);
-    return dateB - dateA; // Sortowanie malejące
+    return dateB - dateA;
   });
 
   let lastDate = null;
@@ -182,7 +188,6 @@ function updateUI() {
     const currentDate = transaction.date;
 
     if (currentDate !== lastDate) {
-      // Dodaj nagłówek daty, jeśli się zmieniła
       const dateHeader = document.createElement("div");
       dateHeader.classList.add("transaction-date-header");
       dateHeader.innerText = currentDate;
@@ -218,14 +223,12 @@ function editTransaction(index) {
     transaction.amount;
   toggleTransactionType(transaction.type === "expense" ? "expenses" : "income");
   document.getElementById("transaction-icon").value = transaction.icon;
-  document.getElementById("icon-preview").src = transaction.icon; // Aktualizacja podglądu ikony
+  document.getElementById("icon-preview").src = transaction.icon;
   document.getElementById("transaction-description").value =
     transaction.description;
 
-  // Ustaw indeks edytowanej transakcji
   document.getElementById("edit-index").value = index;
 
-  // Pokaż modal bez resetowania kwoty
   showAddTransactionModal(false);
 }
 
@@ -427,11 +430,10 @@ function filterTransactions(type) {
   const filteredTransactions =
     type === "all" ? transactions : transactions.filter((t) => t.type === type);
 
-  // Sortowanie transakcji od najnowszej do najstarszej
   const sortedTransactions = filteredTransactions.sort((a, b) => {
     const dateA = new Date(a.date);
     const dateB = new Date(b.date);
-    return dateB - dateA; // Sortowanie malejące
+    return dateB - dateA;
   });
 
   let lastDate = null;
@@ -440,7 +442,6 @@ function filterTransactions(type) {
     const currentDate = transaction.date;
 
     if (currentDate !== lastDate) {
-      // Dodaj nagłówek daty, jeśli się zmieniła
       const dateHeader = document.createElement("div");
       dateHeader.classList.add("transaction-date-header");
       dateHeader.innerText = currentDate;

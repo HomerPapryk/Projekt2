@@ -12,7 +12,6 @@
   </head>
   <body>
     <div class="app">
-      <!-- Strona Główna -->
       <div id="home-page" class="page active">
         <header class="app-header">
           <div class="header-center">
@@ -26,7 +25,6 @@
             />
           </div>
         </header>
-
         <main>
           <section class="balance-section">
             <div class="balance-box">
@@ -34,15 +32,12 @@
               <p id="balance-message">Możesz jeszcze wydać 0 złotych</p>
             </div>
           </section>
-
           <section class="transaction-section">
             <ul id="transaction-list" class="transaction-list">
             </ul>
           </section>
         </main>
       </div>
-
-      <!-- Sekcja Portfel -->
       <div id="wallet-page" class="page">
         <header class="app-header">
           <div class="header-center">
@@ -56,7 +51,6 @@
             />
           </div>
         </header>
-
         <main>
           <section class="balance-section">
             <div class="balance-box">
@@ -64,8 +58,6 @@
               <p id="wallet-message">Wybierz kategorię</p>
             </div>
           </section>
-
-          <!-- Zakładki w sekcji Portfel -->
           <div class="wallet-type-switch">
             <button class="wallet-button active" id="expense-button" onclick="filterTransactions('expense')">Wydatki</button>
             <button class="wallet-button" id="income-button" onclick="filterTransactions('income')">Przychód</button>
@@ -73,12 +65,9 @@
           </div>
 
           <ul id="wallet-transaction-list" class="transaction-list">
-            <!-- Przychody i wydatki będą dodawane dynamicznie -->
           </ul>
         </main>
       </div>
-
-   <!-- Sekcja Wykresy -->
 <div id="chart-page" class="page">
   <header class="app-header">
     <div class="header-center">
@@ -101,7 +90,7 @@
       <div class="chart-container">
         <canvas id="expense-chart"></canvas>
       </div>
-      <div id="chart-legend"></div> <!-- Kontener na legendę -->
+      <div id="chart-legend"></div> 
     </section>
   </main>
 </div>
@@ -120,7 +109,6 @@
     <button class="nav-button" onclick="navigateTo('chart')">
       <i class="fas fa-chart-pie"></i>
     </button>
-    <!-- Tutaj dodamy przycisk do przełączania trybu -->
     <button class="nav-button" id="toggle-button" onclick="switcher()">
       <div class="mover">
         <svg class="icon sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -144,50 +132,39 @@
 
       <div id="transaction-modal" class="modal">
         <div class="modal-content">
-          <span class="close-btn" onclick="closeTransactionModal()">&times;</span> <!-- Przycisk zamknięcia -->
-      
-          <!-- Nagłówki expenses / income -->
-          <div class="transaction-type-switch">
+          <span class="close-btn" onclick="closeTransactionModal()">&times;</span> 
+                <div class="transaction-type-switch">
             <button id="modal-expenses-button" class="active">expenses</button>
             <button id="modal-income-button">income</button>
           </div>
-      
-          <!-- Wybór daty -->
-          <div class="date-selector" id="date-selector">
-            <!-- Daty będą generowane dynamicznie -->
+                <div class="date-selector" id="date-selector">
           </div>
-           <!-- Ukryte pole do przechowywania indeksu edytowanej transakcji -->
     <input type="hidden" id="edit-index" value="">
-      
-          <!-- Kwota -->
-          <div class="amount-display">
+                <div class="amount-display">
             <span id="currency-symbol">PLN</span>
             <span id="transaction-amount-display">0.00</span>
           </div>
-      
-          <!-- Wybór ikony i opis -->
-          <div class="transaction-info">
+                <div class="transaction-info">
             <img id="icon-preview" src="Iconsexpenses/Jedzenie.svg" alt="Ikona" style="width:30px; height:30px; vertical-align:middle;">
             <select id="transaction-icon">
-                <!-- Opcje ikon będą generowane dynamicznie przez JS -->
             </select>
             <input type="text" id="transaction-description" placeholder="Opis" />
           </div>
-      
-          <!-- Klawiatura numeryczna -->
-          <div class="keyboard">
+            <div class="keyboard">
             <div class="key">1</div>
             <div class="key">2</div>
             <div class="key">3</div>
+            <div class="key">C</div> 
             <div class="key">4</div>
             <div class="key">5</div>
             <div class="key">6</div>
+            <div class="key">←</div> 
             <div class="key">7</div>
             <div class="key">8</div>
             <div class="key">9</div>
-            <div class="key">0</div>
-            <div class="key">.</div>
-            <div class="key">&#10004;</div>
+            <div class="key">.</div> 
+            <div class="key large">0</div> 
+            <div class="key large">&#10004;</div> 
           </div>
         </div>
       </div>

@@ -39,6 +39,22 @@
   --date-item-selected-dark: #333;
 }
 
+.app {
+  position: relative;
+}
+
+.app.blur:before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 999; /* Ustawienie poniżej modala */
+  pointer-events: none; /* Umożliwia interakcje z modalem */
+}
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
@@ -71,6 +87,14 @@ body.dark-mode .app-header {
   color: var(--box-text-light);
   border: 1px solid var(--border-light);
   transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  flex-shrink: 0;
+  padding: 10px;
+  text-align: center;
+}
+
+.transaction-list-container {
+  flex: 1;
+  overflow-y: auto;
 }
 
 body.dark-mode .balance-box {
@@ -79,21 +103,52 @@ body.dark-mode .balance-box {
   border: 1px solid var(--border-dark);
 }
 
-/* Stylizacja listy transakcji */
-
 .transaction-list-container {
-  max-height: 400px; /* Ustal maksymalną wysokość kontenera listy */
-  overflow-y: auto; /* Dodaj przewijanie w pionie */
-  padding-right: 10px; /* Dodatkowy padding dla estetyki */
-}
-.transaction-list li {
-  background-color: var(--transaction-background-light);
-  border: 1px solid var(--transaction-border-light);
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s, border-color 0.3s;
+  flex-grow: 1;
+  overflow-y: auto;
 }
 
-body.dark-mode .transaction-list li {
+/* Stylizacja listy transakcji */
+#transaction-list,
+#wallet-transaction-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+#wallet-transaction-list {
+  list-style-type: none;
+  padding: 0;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+#transaction-list li,
+#wallet-transaction-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#transaction-list li .actions,
+#wallet-transaction-list li .actions {
+  display: flex;
+  gap: 15px;
+}
+
+#transaction-list .icon,
+#wallet-transaction-list .icon {
+  width: 50px;
+  height: 50px;
+}
+
+body.dark-mode #transaction-list li,
+body.dark-mode #wallet-transaction-list li {
   background-color: var(--transaction-background-dark);
   border: 1px solid var(--transaction-border-dark);
 }
@@ -102,7 +157,11 @@ body.dark-mode .transaction-list li {
 .app-footer {
   background-color: var(--footer-background-light);
   border-top: 1px solid var(--border-light);
-  transition: background-color 0.3s, border-color 0.3s;
+  padding: 10px 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  overflow: hidden;
 }
 
 body.dark-mode .app-footer {
@@ -125,9 +184,9 @@ body.dark-mode .nav-button {
 .transaction-details .icon {
   width: 10px;
   height: 10px;
-  display: block; /* Upewnia się, że ikony są wyświetlane */
-  opacity: 1; /* Upewnia się, że ikony są widoczne */
-  position: static; /* Upewnia się, że pozycjonowanie jest właściwe */
+  display: block;
+  opacity: 1;
+  position: static;
 }
 
 /* Klawiatura */
@@ -140,7 +199,7 @@ body.dark-mode .transaction-date-header {
   font-weight: bold;
   margin: 15px 0 5px 0;
   padding: 5px;
-  background-color: #535353; /* lub inny kolor pasujący do strony */
+  background-color: #535353;
   border-radius: 5px;
 }
 
@@ -276,8 +335,8 @@ body.dark-mode .date-item.selected {
 }
 
 .dark-mode .nav-button.large {
-  background-color: #ffffff; /* Czarne tło w trybie ciemnym */
-  color: #000000; /* Białe tekst/ikona w trybie ciemnym */
+  background-color: #ffffff;
+  color: #000000;
   padding: 15px;
   font-size: 2rem;
   border-radius: 50%;
@@ -327,8 +386,8 @@ body.dark-mode .date-item.selected {
   align-items: center;
   padding: 10px;
   border-bottom: 1px solid #ddd;
-  background-color: #fff; /* Zapewnia kontrast z tłem */
-  border-radius: 5px; /* Zaokrąglenie krawędzi dla lepszego wyglądu */
+  background-color: #fff;
+  border-radius: 5px;
   margin-bottom: 10px;
 }
 
@@ -336,7 +395,7 @@ body.dark-mode .date-item.selected {
   font-weight: bold;
   margin: 15px 0 5px 0;
   padding: 5px;
-  background-color: #f0f0f0; /* lub inny kolor pasujący do strony */
+  background-color: #f0f0f0;
   border-radius: 5px;
 }
 
@@ -351,6 +410,10 @@ body.dark-mode .date-item.selected {
   padding-right: 100px;
 }
 
+.transaction-section {
+  padding: 20px;
+}
+
 .balance-box {
   background-color: #000000;
   color: #ffffff;
@@ -361,48 +424,11 @@ body.dark-mode .date-item.selected {
   margin: 10px;
 }
 
-#balance-message,
-#wallet-message {
-  margin-top: 10px;
-  font-size: 1rem;
-}
-
-.transaction-section {
-  padding: 20px;
-}
-
-.transaction-list {
-  list-style-type: none;
-  padding: 0;
-}
-
-.transaction-list li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.transaction-list li .actions {
-  display: flex;
-  gap: 10px;
-}
-
-.transaction-list .icon {
-  width: 50px;
-  height: 50px;
-}
-
 .transaction-date-header {
   font-weight: bold;
   margin: 15px 0 5px 0;
   padding: 5px;
-  background-color: #f0f0f0; /* lub inny kolor pasujący do strony */
+  background-color: #f0f0f0;
   border-radius: 5px;
 }
 
@@ -421,11 +447,6 @@ body.dark-mode .date-item.selected {
 
 .transaction-info {
   margin-left: 10px;
-}
-
-.icon {
-  width: 24px;
-  height: 24px;
 }
 
 .transaction-amount {
@@ -433,16 +454,11 @@ body.dark-mode .date-item.selected {
   padding-right: 10px;
 }
 
-.actions {
-  display: flex;
-  gap: 10px;
-}
-
 .transaction-date-header {
   font-weight: bold;
   margin: 15px 0 5px 0;
   padding: 5px;
-  background-color: #f0f0f0; /* lub inny kolor pasujący do strony */
+  background-color: #f0f0f0;
   border-radius: 5px;
 }
 
@@ -461,11 +477,6 @@ body.dark-mode .date-item.selected {
 
 .transaction-info {
   margin-left: 10px;
-}
-
-.icon {
-  width: 24px;
-  height: 24px;
 }
 
 .transaction-amount {
@@ -474,12 +485,52 @@ body.dark-mode .date-item.selected {
 }
 
 #transaction-description {
-  width: 50%; /* Szerokość na całe dostępne miejsce */
-  padding: 5px; /* Wewnętrzne odstępy, aby tekst nie był blisko krawędzi */
-  font-size: 0.9rem; /* Wielkość czcionki */
-  border-radius: 5px; /* Zaokrąglenie rogów */
-  border: 1px solid #000000; /* Kolor i grubość obramowania */
-  box-sizing: border-box; /* Zapewnia, że padding nie zwiększa szerokości elementu */
+  width: 50%;
+  padding: 5px;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  border: 1px solid #000000;
+  box-sizing: border-box;
+}
+
+.transaction-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.transaction-info img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+#transaction-icon option {
+  display: flex;
+  align-items: center;
+}
+
+#transaction-icon option img {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
+#balance-message,
+#wallet-message {
+  margin-top: 10px;
+  font-size: 1rem;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
 }
 
 .chart-page,
@@ -519,6 +570,7 @@ body.dark-mode .date-item.selected {
   position: relative;
   width: 30px;
   height: 30px;
+  overflow: hidden;
 }
 
 .icon {
@@ -528,11 +580,11 @@ body.dark-mode .date-item.selected {
   width: 100%;
   height: 100%;
   transition: transform 0.5s ease, opacity 0.5s ease;
-  opacity: 0; /* Domyślnie ukryjemy obie ikony */
+  opacity: 0;
 }
 
 .sun {
-  opacity: 1; /* Ikona słońca będzie domyślnie widoczna */
+  opacity: 1;
   transform: translateY(0);
 }
 
@@ -578,18 +630,18 @@ body.dark-mode .nav-button {
 
 .keyboard {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Trzy kolumny */
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   margin-top: 20px;
-  width: 100%; /* Przyciski zajmują pełną szerokość modala */
+  width: 100%;
 }
 
 .keyboard .key {
-  font-size: 1.5rem; /* Rozmiar czcionki przycisków */
-  padding: 15px 0; /* Padding wewnętrzny przycisków */
+  font-size: 1.5rem;
+  padding: 15px 0;
   text-align: center;
   background-color: #f0f0f0;
-  border-radius: 50%; /* Zaokrąglenie przycisków */
+  border-radius: 50%;
   user-select: none;
 }
 .key {
@@ -611,30 +663,19 @@ body.dark-mode .nav-button {
   color: #fff;
 }
 
-.transaction-info {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 10px;
-}
-
-.transaction-info img {
-  width: 30px;
-  height: 30px;
-  margin-right: 10px;
-}
 .modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Przezroczyste tło */
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
-  display: none; /* Ukryj modal */
+  display: none;
   justify-content: center;
   align-items: center;
-  overflow-y: auto; /* Przewijanie w przypadku długiej zawartości */
+  overflow-y: auto;
+  z-index: 1000; /* Ensure the modal is above other content */
 }
 .modal-button {
   background-color: #000;
@@ -654,18 +695,7 @@ body.dark-mode .nav-button {
 }
 
 #currency-symbol {
-  margin-right: 10px; /* Odstęp po prawej stronie symbolu waluty */
-}
-
-#transaction-icon option {
-  display: flex;
-  align-items: center;
-}
-
-#transaction-icon option img {
-  width: 20px;
-  height: 20px;
-  margin-right: 8px;
+  margin-right: 10px;
 }
 
 .modal-content {
@@ -674,19 +704,22 @@ body.dark-mode .nav-button {
   border-radius: 10px;
   position: relative;
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  transform: scale(0.9); /* Początkowy rozmiar */
-  opacity: 0; /* Początkowa przezroczystość */
+  transform: scale(0.9);
+  opacity: 0;
+  width: 100%;
+  max-width: 500px;
+  z-index: 1000; /* Ensure the modal is above other content */
 }
 .modal.show .modal-content {
-  transform: scale(1); /* Powiększenie do pełnego rozmiaru */
-  opacity: 1; /* Ustawienie pełnej przezroczystości */
+  transform: scale(1);
+  opacity: 1;
 }
 /* Styl dla przycisku zamknięcia */
 .close-btn {
   position: absolute;
   top: 20px;
   right: 20px;
-  font-size: 2rem; /* Zwiększenie rozmiaru czcionki */
+  font-size: 2rem;
   font-weight: bold;
   color: #333;
   cursor: pointer;
@@ -699,7 +732,7 @@ body.dark-mode .nav-button {
 }
 /* Ulepszenie przycisku zamknięcia na urządzeniach mobilnych */
 .close-btn:hover {
-  color: #000; /* Ciemniejszy kolor przy najechaniu */
+  color: #000;
 }
 
 /* portfel buttons */
@@ -802,31 +835,60 @@ body.dark-mode .nav-button {
 
 .keyboard {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Trzy kolumny */
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
   width: 100%;
-  max-width: 400px; /* Maksymalna szerokość klawiatury */
+  max-width: 400px;
   margin: 0 auto;
 }
 
 .keyboard .key {
   background-color: #f0f0f0;
   padding: 15px 0;
-  border-radius: 50%;
-  font-size: 1.5rem;
+  border-radius: 10px;
+  font-size: 1.2rem;
   text-align: center;
   cursor: pointer;
   width: 100%;
-  height: 80px; /* Stała wysokość dla klawiszy */
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.3s ease;
 }
 
-.key:last-child {
+.keyboard .key.large {
+  grid-column: span 2;
+  height: 60px;
+}
+
+.keyboard .key:last-child {
   background-color: #000;
   color: #fff;
+}
+/* Stylizacja klawiszy C, ←, i . */
+.keyboard .key:nth-child(4) {
+  /* Klawisz C */
+  background-color: #ffc1b3;
+  color: white;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.keyboard .key:nth-child(8) {
+  /* Klawisz ← */
+  background-color: #fff3b3;
+  color: black;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.keyboard .key:nth-child(12) {
+  /* Klawisz . */
+  background-color: #b3d9ff;
+  color: white;
+  font-weight: bold;
+  font-size: 1.5rem;
 }
 
 #chart-legend {
@@ -845,63 +907,80 @@ body.dark-mode .nav-button {
 }
 
 body.dark-mode #chart-legend img {
-  filter: brightness(0) invert(1); /* Użycie filtra CSS, który zmienia kolor na biały */
+  filter: brightness(0) invert(1);
 }
 
 body.dark-mode #icon-preview {
   filter: brightness(0) invert(1);
 }
 
+body.dark-mode #transaction-list .icon,
+body.dark-mode #wallet-transaction-list .icon {
+  filter: brightness(0) invert(1);
+}
+
 .chart-section {
   display: flex;
-  flex-direction: column; /* Domyślnie kolumny dla małych ekranów */
-  align-items: center; /* Centrowanie zawartości */
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   text-align: center;
   width: 100%;
-  margin: 20px 0; /* Margines dookoła sekcji wykresu */
+  margin: 20px 0;
 }
 
 .chart-container {
   width: 100%;
-  max-width: 600px; /* Maksymalna szerokość wykresu */
-  margin: 0 auto; /* Wyśrodkowanie wykresu */
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 #chart-legend {
-  margin-top: 16px; /* Margines nad legendą */
+  margin-top: 16px;
   text-align: center;
 }
 
 #chart-legend div {
   display: flex;
   align-items: center;
-  margin: 4px auto; /* Wyśrodkowanie elementów legendy */
+  margin: 4px auto;
 }
 
 #chart-legend img {
   vertical-align: middle;
 }
 
-/* Media Query dla większych ekranów */
+/* Media Query dla dużych ekranów */
 @media (min-width: 1024px) {
   .chart-section {
-    flex-direction: row; /* Rzędy dla większych ekranów */
-    align-items: flex-start; /* Dopasowanie do góry */
-    justify-content: space-between; /* Rozstawienie wykresu i legendy */
-    text-align: left; /* Tekst wyrównany do lewej */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    width: 100%;
+  }
+
+  .chart-section h3 {
+    width: 100%;
+    margin-bottom: 20px;
+    text-align: left;
   }
 
   .chart-container {
-    width: 60%; /* Wykres zajmuje 60% szerokości */
-    max-width: none; /* Usunięcie ograniczenia szerokości */
+    display: flex;
+    width: 100%;
+    align-items: center;
+  }
+
+  .chart-container canvas {
+    width: 65%;
+    margin-right: 20px;
   }
 
   #chart-legend {
-    margin-top: 0; /* Usunięcie górnego marginesu */
-    width: 35%; /* Legenda zajmuje 35% szerokości */
-    margin-left: 20px; /* Margines z lewej strony legendy */
-    text-align: left; /* Wyrównanie tekstu legendy do lewej */
+    flex-grow: 1;
+    text-align: left;
+    align-self: flex-start;
   }
 }
 
@@ -913,17 +992,57 @@ body.dark-mode #icon-preview {
 
   .keyboard .key {
     font-size: 1.2rem;
-    height: 60px; /* Zmniejszenie wysokości klawiszy na mniejszych ekranach */
+    height: 60px;
   }
 }
 
 /* Dostosowanie dla większych ekranów */
 @media (min-width: 768px) {
   .keyboard {
-    max-width: 450px; /* Zwiększenie szerokości klawiatury na większych ekranach */
+    max-width: 450px;
   }
 
   .keyboard .key {
     font-size: 1.8rem;
   }
+}
+
+#home-page .transaction-section {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 60px;
+  padding-bottom: 20px;
+}
+
+/* Ogólne ustawienia dla każdej sekcji strony */
+.page {
+  display: none;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.page.active {
+  display: flex;
+}
+
+.page main {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-bottom: 60px;
+}
+
+/* Dodanie stylu do poprawienia przewijania w sekcji Portfel */
+#wallet-page .transaction-section {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 60px;
+  padding-bottom: 20px;
+}
+
+#wallet-transaction-list {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 60px;
+  padding-bottom: 20px;
 }
