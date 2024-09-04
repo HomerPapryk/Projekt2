@@ -217,7 +217,7 @@ body {
   justify-content: center;
   padding: 0;
   font-size: 1.5rem;
-  transition: color 0.3s ease;
+  transition: transform 0.3s ease-in-out;
   color: var(--nav-button-light);
 }
 
@@ -233,6 +233,38 @@ body {
   border-radius: 50%;
   width: 60px;
   height: 60px;
+}
+
+.nav-button:hover {
+  transform: scale(1.5);
+}
+
+.nav-button.large:hover {
+  transform: scale(1.1);
+}
+
+.theme-toggle {
+  transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.2);
+  transition: transform 0.3s ease-in-out;
+}
+
+.light-mode .theme-toggle:hover #sunny {
+  transform: scale(1.2);
+  transition: transform 0.3s ease-in-out;
+  color: rgba(255, 223, 0, 1);
+}
+
+.dark-mode .theme-toggle:hover #moon {
+  color: rgba(200, 200, 255, 0.7);
+}
+
+.dark-mode .theme-toggle #moon {
+  color: var(--nav-button-dark);
 }
 
 /* Stylowanie ikon */
@@ -453,7 +485,7 @@ body {
 }
 
 .dark-mode .wallet-button:hover {
-  background-color: var(--wallet-button-active-dark);
+  background-color: #3b3b3b;
   color: #fff;
 }
 
@@ -792,8 +824,8 @@ ion-icon {
 }
 
 #moon {
-  color: var(--nav-button-dark);
-  opacity: 0;
+  stroke: none; /* Usuń ewentualny obrys */
+  overflow: hidden; /* Ukryj nadmiar */
 }
 
 .light-mode #sunny {
