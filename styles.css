@@ -681,17 +681,10 @@ body {
   #chart-legend {
     justify-content: flex-start;
   }
-
-  .legend-item {
-    width: calc(50% - 10px);
-  }
 }
 
 /* Media query for medium screens (768px - 1024px) */
 @media (min-width: 768px) and (max-width: 1024px) {
-  .legend-item {
-    width: calc(50% - 10px);
-  }
 }
 
 /* Media query for small screens (less than 768px) */
