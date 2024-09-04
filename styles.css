@@ -242,10 +242,64 @@ body {
 .nav-button.large:hover {
   transform: scale(1.1);
 }
-
 .theme-toggle {
-  transition: background-color 0.3s ease, color 0.3s ease;
   cursor: pointer;
+  background-color: transparent;
+  border: none;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+ion-icon {
+  font-size: 1.8rem;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  position: absolute;
+}
+
+#sunny,
+#moon {
+  display: none; /* Ukryj obie ikony na starcie */
+}
+
+.light-mode #sunny {
+  display: block; /* Pokaż słońce w trybie jasnym */
+}
+
+.dark-mode #moon {
+  display: block; /* Pokaż księżyc w trybie ciemnym */
+}
+
+#sunny {
+  color: var(--nav-button-light);
+  opacity: 1;
+}
+
+#moon {
+  stroke: none; /* Usuń ewentualny obrys */
+  overflow: hidden; /* Ukryj nadmiar */
+}
+
+.light-mode #sunny {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.light-mode #moon {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.dark-mode #sunny {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.dark-mode #moon {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .theme-toggle:hover {
@@ -800,52 +854,6 @@ body {
 
 .dark-mode .transaction-date-header {
   background-color: var(--transaction-date-dark);
-}
-
-.theme-toggle {
-  cursor: pointer;
-  background-color: transparent;
-  border: none;
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-ion-icon {
-  font-size: 1.8rem;
-  transition: opacity 0.5s ease, transform 0.5s ease;
-  position: absolute;
-}
-
-#sunny {
-  color: var(--nav-button-light);
-  opacity: 1;
-}
-
-#moon {
-  stroke: none; /* Usuń ewentualny obrys */
-  overflow: hidden; /* Ukryj nadmiar */
-}
-
-.light-mode #sunny {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.light-mode #moon {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-
-.dark-mode #sunny {
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.dark-mode #moon {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 /* Kluczowe animacje */

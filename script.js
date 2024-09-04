@@ -783,33 +783,63 @@ function activateButton(buttonId) {
 
 const themeToggle = document.querySelector(".theme-toggle");
 const bodyClassList = document.body.classList;
+const sunnyIcon = document.getElementById("sunny");
+const moonIcon = document.getElementById("moon");
 
+// Toggle theme on button click
 themeToggle.addEventListener("click", () => {
   if (bodyClassList.contains("dark-mode")) {
     enableLightMode();
   } else {
     enableDarkMode();
   }
-
-  updateChart();
 });
 
+// Enable dark mode
 function enableDarkMode() {
-  bodyClassList.add("dark-mode");
-  bodyClassList.remove("light-mode");
+  document.body.classList.add("dark-mode");
+  document.body.classList.remove("light-mode");
+  localStorage.setItem("theme", "dark"); // Save user preference
+  toggleIcons(); // Update icons visibility
 }
 
+// Enable light mode
 function enableLightMode() {
-  bodyClassList.add("light-mode");
-  bodyClassList.remove("dark-mode");
+  document.body.classList.add("light-mode");
+  document.body.classList.remove("dark-mode");
+  localStorage.setItem("theme", "light"); // Save user preference
+  toggleIcons(); // Update icons visibility
 }
 
-const setThemePreference = () => {
-  if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-    enableDarkMode();
+// Toggle the sun and moon icons based on the current theme
+function toggleIcons() {
+  if (bodyClassList.contains("dark-mode")) {
+    sunnyIcon.style.display = "none";
+    moonIcon.style.display = "block";
   } else {
-    enableLightMode();
+    sunnyIcon.style.display = "block";
+    moonIcon.style.display = "none";
   }
+}
 
+// Set the theme based on saved preference or system preference
+document.addEventListener("DOMContentLoaded", () => {
   setThemePreference();
-};
+});
+
+function setThemePreference() {
+  const savedTheme = localStorage.getItem("theme");
+
+  if (savedTheme === "dark") {
+    enableDarkMode();
+  } else if (savedTheme === "light") {
+    enableLightMode();
+  } else {
+    // No preference saved, fallback to system theme preference
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      enableDarkMode();
+    } else {
+      enableLightMode();
+    }
+  }
+}
