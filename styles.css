@@ -6,6 +6,8 @@
   --box-background-light: #000000;
   --box-text-light: #ffffff;
   --transaction-background-light: #ffffff;
+  --transaction-date-light: #bfbfbf;
+  --date-background-light: #d1d1d1;
   --transaction-border-light: #ddd;
   --footer-background-light: #ffffff;
   --nav-button-light: #333;
@@ -25,6 +27,7 @@
   --box-background-dark: #1e1e1e;
   --box-text-dark: #ffffff;
   --transaction-background-dark: #1e1e1e;
+  --transaction-date-dark: #494949;
   --transaction-border-dark: #333;
   --footer-background-dark: #333333;
   --nav-button-dark: #ffffff;
@@ -152,6 +155,8 @@ body {
   background-color: var(--transaction-background-light);
   border-radius: 5px;
   margin-bottom: 10px;
+  margin-left: 15px;
+  margin-right: 15px;
   transition: background-color 400ms ease;
 }
 
@@ -173,18 +178,6 @@ body {
 .transaction-amount {
   margin-left: auto;
   padding-right: 10px;
-}
-
-.transaction-date-header {
-  font-weight: bold;
-  margin: 15px 0 5px 0;
-  padding: 5px;
-  background-color: var(--transaction-background-light);
-  border-radius: 5px;
-}
-
-.dark-mode .transaction-date-header {
-  background-color: var(--transaction-background-dark);
 }
 
 .transaction-list-container {
@@ -757,14 +750,14 @@ body {
 
 .transaction-date-header {
   font-weight: bold;
-  margin: 15px 0 5px 0;
+  margin: 15px 15px 5px 15px;
   padding: 5px;
-  background-color: var(--transaction-background-light);
+  background-color: var(--transaction-date-light);
   border-radius: 5px;
 }
 
 .dark-mode .transaction-date-header {
-  background-color: var(--transaction-background-dark);
+  background-color: var(--transaction-date-dark);
 }
 
 .theme-toggle {
