@@ -432,15 +432,17 @@ function createLegend(groupedTransactions, chart) {
     legendItem.classList.add("legend-item");
 
     legendItem.innerHTML = `
-      <div class="legend-icon">
-        <img src="${categoryIconPath}" alt="${transaction.category}" />
-      </div>
-      <div class="legend-details">
-        <span class="legend-category">${transaction.category}</span>
-        <span>${transaction.count} Transactions</span>
-        <span>${transaction.amount.toFixed(2)} PLN</span>
-      </div>
-    `;
+  <div class="legend-icon">
+    <img src="${categoryIconPath}" alt="${transaction.category}" />
+  </div>
+  <div class="legend-details">
+    <span class="legend-category">${transaction.category}</span>
+    <span>${transaction.count} ${
+      transaction.count === 1 ? "Transaction" : "Transactions"
+    }</span>
+    <span>${transaction.amount.toFixed(2)} PLN</span>
+  </div>
+`;
 
     legendContainer.appendChild(legendItem);
 
