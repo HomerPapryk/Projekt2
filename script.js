@@ -74,7 +74,7 @@ function generateDates() {
 
   const dateInput = document.createElement("input");
   dateInput.type = "date";
-  dateInput.value = today.toISOString().substr(0, 10); // ISO format date
+  dateInput.value = today.toISOString().substr(0, 10);
   dateInput.max = today.toISOString().substr(0, 10);
 
   dateDisplay.setAttribute("data-date", dateInput.value);
@@ -109,7 +109,6 @@ function navigateTo(section) {
 
   document.getElementById(section + "-page").classList.add("active");
 
-  // If navigating to the Wallet, make sure the transactions are filtered properly
   if (section === "wallet") {
     const activeFilter = document
       .querySelector(".wallet-button.active")
@@ -229,8 +228,7 @@ function updateUI() {
       const dateHeader = document.createElement("div");
       dateHeader.classList.add("transaction-date-header");
 
-      // Formatowanie daty przed wyświetleniem
-      const formattedDate = formatDateForDisplay(currentDate); // Poprawione formatowanie daty
+      const formattedDate = formatDateForDisplay(currentDate);
       dateHeader.innerText = formattedDate;
 
       transactionList.appendChild(dateHeader);
@@ -285,7 +283,7 @@ function filterTransactions(type) {
     if (currentDate !== lastDate) {
       const dateHeader = document.createElement("div");
       dateHeader.classList.add("transaction-date-header");
-      const formattedDate = formatDateForDisplay(currentDate); // Poprawione formatowanie daty
+      const formattedDate = formatDateForDisplay(currentDate);
       dateHeader.innerText = formattedDate;
       transactionList.appendChild(dateHeader);
       lastDate = currentDate;
@@ -329,11 +327,10 @@ function editTransaction(index) {
 }
 
 function deleteTransaction(index) {
-  transactions.splice(index, 1); // Remove the transaction
+  transactions.splice(index, 1);
   updateUI();
   saveTransactions();
 
-  // Immediately filter transactions for the active filter in the Wallet
   const activeFilter = document
     .querySelector(".wallet-button.active")
     .id.replace("-button", "");
@@ -372,8 +369,6 @@ function updateBalance() {
   document.getElementById("balance-message").innerText = balanceMessage;
 }
 
-// Rejestracja pluginu, który będzie wyświetlał tekst w środku doughnuta
-// Rejestracja pluginu, który będzie wyświetlał tekst w środku doughnuta
 Chart.register({
   id: "centerTextPlugin",
   beforeDraw: function (chart) {
@@ -381,7 +376,6 @@ Chart.register({
     const width = chart.width;
     const height = chart.height;
 
-    // Oblicz sumy przychodów i wydatków
     const totalIncome = chart.config._config.incomeData.reduce(
       (sum, t) => sum + t.amount,
       0
@@ -391,39 +385,32 @@ Chart.register({
       0
     );
 
-    // Oblicz procent wykorzystanych środków
     const percentageUsed = totalIncome
       ? ((totalExpense / totalIncome) * 100).toFixed(0)
       : 0;
 
-    // Ustawienie kolorów
-    const expenseColor = "#FF4D4D"; // Ciemny pastelowy czerwony
-    const incomeColor = "#2e8b57 "; // Ciemny pastelowy zielony
+    const expenseColor = "#FF4D4D";
+    const incomeColor = "#2e8b57 ";
     const percentageColor = document.body.classList.contains("dark-mode")
-      ? "#ffffff" // Biały w trybie ciemnym
-      : "#333333"; // Ciemny szary w trybie jasnym
+      ? "#ffffff"
+      : "#333333";
 
-    // Resetuj kontekst i ustaw parametry tekstu
     ctx.save();
     ctx.clearRect(0, 0, width, height);
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.font = "bold 3em Segoe UI";
 
-    // Rysowanie procentów
     ctx.fillStyle = percentageColor;
     const centerX = width / 2;
     const centerY = height / 2;
     ctx.fillText(percentageUsed + "%", centerX, centerY - 10);
 
-    // Mniejsze fonty dla kwot przychodu i wydatków
     ctx.font = "1.4em Segoe UI";
 
-    // Wydatki na czerwono
     ctx.fillStyle = expenseColor;
     ctx.fillText(totalExpense.toFixed(2) + " PLN", centerX, centerY + 30);
 
-    // Przychody na zielono
     ctx.font = "1.1em Segoe UI";
     ctx.fillStyle = incomeColor;
     ctx.fillText(totalIncome.toFixed(2) + " PLN", centerX, centerY + 60);
@@ -434,7 +421,7 @@ Chart.register({
 
 function createLegend(groupedTransactions, chart) {
   const legendContainer = document.getElementById("chart-legend");
-  legendContainer.innerHTML = ""; // Wyczyść poprzednią legendę
+  legendContainer.innerHTML = "";
 
   Object.values(groupedTransactions).forEach((transaction, index) => {
     const categoryIconPath = Object.keys(categoryNames).find(
@@ -459,22 +446,18 @@ function createLegend(groupedTransactions, chart) {
 
     let isHidden = false;
 
-    // Click event to toggle visibility
     legendItem.addEventListener("click", function () {
       const categoryIndex = chart.data.labels.indexOf(transaction.category);
 
-      // Toggle visibility for the category
       isHidden = !isHidden;
       chart.getDatasetMeta(0).data[categoryIndex].hidden = isHidden;
 
-      // Strike-through if hidden
       if (isHidden) {
         legendItem.classList.add("strike-through");
       } else {
         legendItem.classList.remove("strike-through");
       }
 
-      // Update chart to reflect changes
       chart.update();
     });
   });
@@ -487,19 +470,18 @@ function updateChart() {
     chartInstance.destroy();
   }
 
-  // Group transactions by category
   const groupedTransactions = transactions.reduce((acc, transaction) => {
     const category = categoryNames[transaction.icon];
     if (!acc[category]) {
       acc[category] = {
         category: category,
         amount: 0,
-        count: 0, // Number of transactions in each category
+        count: 0,
         type: transaction.type,
       };
     }
     acc[category].amount += parseFloat(transaction.amount);
-    acc[category].count += 1; // Increase transaction count
+    acc[category].count += 1;
     return acc;
   }, {});
 
@@ -538,7 +520,6 @@ function updateChart() {
 
   const allColors = allCategories.map((category) => colors[category]);
 
-  // Doughnut chart setup
   chartInstance = new Chart(ctx, {
     type: "doughnut",
     data: {
@@ -549,7 +530,7 @@ function updateChart() {
           backgroundColor: allColors,
           borderColor: "#ffffff",
           borderWidth: 2,
-          cutout: "70%", // Doughnut cutout
+          cutout: "70%",
         },
       ],
     },
@@ -566,32 +547,27 @@ function updateChart() {
             },
           },
         },
-        // Plugin for center text
       },
     },
-    incomeData: incomeData, // Przekazanie danych o przychodach i wydatkach
+    incomeData: incomeData,
     expenseData: expenseData,
   });
 
-  // Update legend with interaction
   createLegend(groupedTransactions, chartInstance);
 }
-// Nasłuchiwanie kliknięcia na przełącznik
 document;
 
 function filterTransactions(type) {
   const transactionList = document.getElementById("wallet-transaction-list");
   transactionList.innerHTML = "";
 
-  // Filtrowanie transakcji na podstawie typu (wydatki, przychody lub wszystkie)
   const filteredTransactions =
     type === "all"
       ? transactions
       : transactions.filter((transaction) => transaction.type === type);
 
-  // Sortowanie transakcji według daty malejąco (najnowsze pierwsze)
   const sortedTransactions = filteredTransactions.sort((a, b) => {
-    const dateA = new Date(a.date); // Upewniamy się, że używany jest format ISO
+    const dateA = new Date(a.date);
     const dateB = new Date(b.date);
     return dateB - dateA;
   });
@@ -601,13 +577,11 @@ function filterTransactions(type) {
   sortedTransactions.forEach((transaction, index) => {
     const currentDate = transaction.date;
 
-    // Wyświetlamy nagłówek z datą tylko jeśli jest nowa data
     if (currentDate !== lastDate) {
       const dateHeader = document.createElement("div");
       dateHeader.classList.add("transaction-date-header");
 
-      // Formatowanie daty przed wyświetleniem (użycie formatDateForDisplay)
-      const formattedDate = formatDateForDisplay(currentDate); // Upewniamy się, że data jest formatowana
+      const formattedDate = formatDateForDisplay(currentDate);
       dateHeader.innerText = formattedDate;
 
       transactionList.appendChild(dateHeader);
@@ -643,10 +617,9 @@ function formatDateForDisplay(isoDate) {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-    weekday: "long", // Dzień tygodnia po polsku
+    weekday: "long",
   };
 
-  // Formatowanie daty jako "środa, 04.09.2024"
   return date.toLocaleDateString("pl-PL", options);
 }
 
@@ -760,7 +733,6 @@ function addTransaction() {
     : "income";
   const icon = transactionIcon.value;
 
-  // Pobieramy datę w formacie ISO z atrybutu data-date
   const date = document
     .querySelector(".date-display")
     .getAttribute("data-date");
@@ -770,7 +742,7 @@ function addTransaction() {
     type: type,
     icon: icon,
     description: description,
-    date: date, // Data w formacie ISO
+    date: date,
   };
 
   transactions.push(transactionData);
@@ -778,7 +750,6 @@ function addTransaction() {
   saveTransactions();
   closeTransactionModal();
 
-  // Filtrujemy transakcje w portfelu natychmiast po dodaniu transakcji
   const activeFilter = document
     .querySelector(".wallet-button.active")
     .id.replace("-button", "");
