@@ -257,6 +257,7 @@ function updateUI() {
     transactionList.appendChild(listItem);
   });
 
+  updateChart();
   updateBalance();
 }
 
@@ -756,6 +757,8 @@ function addTransaction() {
     .querySelector(".wallet-button.active")
     .id.replace("-button", "");
   filterTransactions(activeFilter);
+
+  updateChart();
 }
 
 document.getElementById("expense-button").addEventListener("click", () => {
