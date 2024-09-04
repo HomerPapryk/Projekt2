@@ -1,36 +1,105 @@
+const categoryNames = {
+  "Iconsexpenses/Food.svg": "Food",
+  "Iconsexpenses/Shopping.svg": "Shopping",
+  "Iconsexpenses/Car.svg": "Car",
+  "Iconsexpenses/Rent.svg": "Rent",
+  "Iconsexpenses/Health.svg": "Health",
+  "Iconsexpenses/Education.svg": "Education",
+  "Iconsexpenses/Entertainment.svg": "Entertainment",
+  "Iconsexpenses/Fuel.svg": "Fuel",
+  "Iconsexpenses/Bills.svg": "Bills",
+  "Iconsincome/Salary.svg": "Salary",
+  "Iconsincome/Bonus.svg": "Bonus",
+  "Iconsincome/SavingsAccount.svg": "Savings Account",
+  "Iconsincome/Investment.svg": "Investment",
+  "Iconsincome/Inheritance.svg": "Inheritance",
+};
+
+const transactionModal = document.getElementById("transaction-modal");
+const transactionAmountDisplay = document.getElementById(
+  "transaction-amount-display"
+);
+
+const homeNavButton = document.getElementById("home-nav-button");
+const walletNavButton = document.getElementById("wallet-nav-button");
+const addTransactionButton = document.getElementById("add-transaction-button");
+const chartNavButton = document.getElementById("chart-nav-button");
+const closeTransactionModalButton = document.getElementById(
+  "close-transaction-modal"
+);
+const transactionForm = document.getElementById("transaction-form");
+const expenseButton = document.getElementById("modal-expenses-button");
+const incomeButton = document.getElementById("modal-income-button");
+const transactionIcon = document.getElementById("transaction-icon");
+const transactionDescription = document.getElementById(
+  "transaction-description"
+);
+const editIndexInput = document.getElementById("edit-index");
+const dateSelector = document.getElementById("date-selector");
+
 let transactions = [];
 let chartInstance = null;
 
 document.addEventListener("DOMContentLoaded", () => {
+  loadTransactions();
   navigateTo("home");
   generateDates();
   updateIconOptions();
 });
 
+homeNavButton.addEventListener("click", () => navigateTo("home"));
+walletNavButton.addEventListener("click", () => navigateTo("wallet"));
+addTransactionButton.addEventListener("click", () =>
+  showAddTransactionModal(false)
+);
+chartNavButton.addEventListener("click", () => navigateTo("chart"));
+closeTransactionModalButton.addEventListener("click", closeTransactionModal);
+expenseButton.addEventListener("click", () =>
+  toggleTransactionType("expenses")
+);
+incomeButton.addEventListener("click", () => toggleTransactionType("income"));
+transactionForm.addEventListener("submit", handleTransactionSubmit);
+transactionIcon.addEventListener("change", updateIconPreview);
+
 function generateDates() {
-  const dateSelector = document.getElementById("date-selector");
   const today = new Date();
+  const dateSelector = document.getElementById("date-selector");
 
-  for (let i = -1; i <= 3; i++) {
-    const date = new Date(today);
-    date.setDate(today.getDate() + i);
-    const day = date.toLocaleString("en-US", { weekday: "short" });
-    const dayNum = date.getDate();
+  const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+  const formattedDate = today.toLocaleDateString("pl-PL", options);
 
-    const dateItem = document.createElement("div");
-    dateItem.classList.add("date-item");
-    if (i === 0) dateItem.classList.add("selected");
+  const dateDisplay = document.createElement("div");
+  dateDisplay.classList.add("date-display");
+  dateDisplay.textContent = formattedDate;
 
-    dateItem.textContent = `${dayNum} ${day}`;
-    dateSelector.appendChild(dateItem);
+  const dateInput = document.createElement("input");
+  dateInput.type = "date";
+  dateInput.value = today.toISOString().substr(0, 10); // ISO format date
+  dateInput.max = today.toISOString().substr(0, 10);
 
-    dateItem.addEventListener("click", function () {
-      document
-        .querySelectorAll(".date-item")
-        .forEach((item) => item.classList.remove("selected"));
-      dateItem.classList.add("selected");
-    });
-  }
+  dateDisplay.setAttribute("data-date", dateInput.value);
+
+  dateInput.style.display = "none";
+
+  dateSelector.innerHTML = "";
+  dateSelector.appendChild(dateDisplay);
+  dateSelector.appendChild(dateInput);
+
+  dateDisplay.addEventListener("click", function () {
+    dateInput.style.display = "block";
+    dateInput.focus();
+    dateDisplay.style.display = "none";
+  });
+
+  dateInput.addEventListener("change", function () {
+    const selectedDate = new Date(dateInput.value);
+    const newFormattedDate = selectedDate.toLocaleDateString("pl-PL", options);
+
+    dateDisplay.textContent = newFormattedDate;
+    dateDisplay.setAttribute("data-date", dateInput.value);
+    dateInput.style.display = "none";
+    dateDisplay.style.display = "block";
+  });
 }
 
 function navigateTo(section) {
@@ -40,136 +109,105 @@ function navigateTo(section) {
 
   document.getElementById(section + "-page").classList.add("active");
 
+  // If navigating to the Wallet, make sure the transactions are filtered properly
+  if (section === "wallet") {
+    const activeFilter = document
+      .querySelector(".wallet-button.active")
+      .id.replace("-button", "");
+    filterTransactions(activeFilter);
+  }
+
   if (section === "chart") {
     updateChart();
   }
 }
 
-function showAddTransactionModal(isNewTransaction = true) {
-  const modal = document.getElementById("transaction-modal");
-  const app = document.querySelector(".app");
-
-  app.classList.add("blur");
-  modal.style.display = "flex";
-
-  if (isNewTransaction) {
-    document.getElementById("transaction-amount-display").innerText = "0.00";
+function showAddTransactionModal(isEdit) {
+  if (!isEdit) {
+    resetForm();
   }
-
+  transactionModal.style.display = "flex";
   setTimeout(() => {
-    modal.classList.add("show");
+    transactionModal.classList.add("show");
   }, 10);
 }
 
 function closeTransactionModal() {
-  const modal = document.getElementById("transaction-modal");
-  const app = document.querySelector(".app");
-
-  modal.classList.remove("show");
+  transactionModal.classList.remove("show");
   setTimeout(() => {
-    modal.style.display = "none";
-    app.classList.remove("blur");
+    transactionModal.style.display = "none";
   }, 300);
 }
+
+function resetForm() {
+  transactionAmountDisplay.innerText = "0.00";
+  transactionDescription.value = "";
+  transactionIcon.selectedIndex = 0;
+  editIndexInput.value = "";
+  toggleTransactionType("expenses");
+  generateDates();
+}
+
 function toggleTransactionType(type) {
-  const expensesButton = document.getElementById("modal-expenses-button");
-  const incomeButton = document.getElementById("modal-income-button");
-
-  expensesButton.classList.toggle("active", type === "expenses");
-  incomeButton.classList.toggle("active", type === "income");
-
+  const isExpense = type === "expenses";
+  expenseButton.classList.toggle("active", isExpense);
+  incomeButton.classList.toggle("active", !isExpense);
   updateIconOptions(type);
 }
 
-document
-  .getElementById("modal-expenses-button")
-  .addEventListener("click", () => {
-    toggleTransactionType("expenses");
-  });
-
-document.getElementById("modal-income-button").addEventListener("click", () => {
-  toggleTransactionType("income");
-});
-
 function updateIconOptions(type = "expenses") {
-  const iconSelect = document.getElementById("transaction-icon");
-  iconSelect.innerHTML = "";
-
   const icons = {
     expenses: [
-      { name: "Jedzenie", path: "Iconsexpenses/Jedzenie.svg" },
-      { name: "Zakupy", path: "Iconsexpenses/Zakupy.svg" },
-      { name: "Samochód", path: "Iconsexpenses/Samochód.svg" },
-      { name: "Czynsz", path: "Iconsexpenses/Czynsz.svg" },
-      { name: "Zdrowie", path: "Iconsexpenses/Zdrowie.svg" },
-      { name: "Edukacja", path: "Iconsexpenses/Edukacja.svg" },
-      { name: "Rozrywka", path: "Iconsexpenses/Rozrywka.svg" },
-      { name: "Paliwo", path: "Iconsexpenses/Paliwo.svg" },
-      { name: "Opłaty", path: "Iconsexpenses/Opłaty.svg" },
+      { name: "Food", path: "Iconsexpenses/Food.svg" },
+      { name: "Shopping", path: "Iconsexpenses/Shopping.svg" },
+      { name: "Car", path: "Iconsexpenses/Car.svg" },
+      { name: "Rent", path: "Iconsexpenses/Rent.svg" },
+      { name: "Health", path: "Iconsexpenses/Health.svg" },
+      { name: "Education", path: "Iconsexpenses/Education.svg" },
+      { name: "Entertainment", path: "Iconsexpenses/Entertainment.svg" },
+      { name: "Fuel", path: "Iconsexpenses/Fuel.svg" },
+      { name: "Bills", path: "Iconsexpenses/Bills.svg" },
     ],
     income: [
-      { name: "Wynagrodzenie", path: "Iconsincome/Wynagordzenie.svg" },
-      { name: "Premia", path: "Iconsincome/Premia.svg" },
+      { name: "Salary", path: "Iconsincome/Salary.svg" },
+      { name: "Bonus", path: "Iconsincome/Bonus.svg" },
+      { name: "Savings Account", path: "Iconsincome/SavingsAccount.svg" },
+      { name: "Investment", path: "Iconsincome/Investment.svg" },
+      { name: "Inheritance", path: "Iconsincome/Inheritance.svg" },
     ],
   };
+
+  transactionIcon.innerHTML = "";
 
   icons[type].forEach((icon) => {
     const option = document.createElement("option");
     option.value = icon.path;
     option.innerText = icon.name;
-    iconSelect.appendChild(option);
+    transactionIcon.appendChild(option);
   });
 
-  if (iconSelect.options.length > 0) {
-    document.getElementById("icon-preview").src = iconSelect.value;
-  }
+  updateIconPreview();
 }
 
-document
-  .getElementById("transaction-icon")
-  .addEventListener("change", function () {
-    document.getElementById("icon-preview").src = this.value;
-  });
+function updateIconPreview() {
+  document.getElementById("icon-preview").src = transactionIcon.value;
+}
 
-function addTransaction() {
-  const amountDisplay = document.getElementById(
-    "transaction-amount-display"
-  ).innerText;
-  const amount = parseFloat(amountDisplay);
+function handleTransactionSubmit(event) {
+  event.preventDefault();
+  addTransaction();
+}
 
-  if (isNaN(amount) || amount <= 0) {
-    alert("Proszę wprowadzić kwotę");
-    return;
+function saveTransactions() {
+  localStorage.setItem("transactions", JSON.stringify(transactions));
+}
+
+function loadTransactions() {
+  const storedTransactions = localStorage.getItem("transactions");
+  if (storedTransactions) {
+    transactions = JSON.parse(storedTransactions);
+    updateUI();
   }
-
-  const type =
-    document.querySelector(".transaction-type-switch button.active").id ===
-    "modal-expenses-button"
-      ? "expense"
-      : "income";
-  const icon = document.getElementById("transaction-icon").value;
-  const description =
-    document.getElementById("transaction-description").value || "Bez opisu";
-  const date = document.querySelector(".date-item.selected").textContent;
-  const editIndex = document.getElementById("edit-index").value;
-
-  const transactionData = {
-    amount: amount.toFixed(2),
-    type: type,
-    icon: icon,
-    description: description,
-    date: date,
-  };
-
-  if (editIndex !== "") {
-    transactions[editIndex] = transactionData;
-  } else {
-    transactions.push(transactionData);
-  }
-
-  updateUI();
-  closeTransactionModal();
-  document.getElementById("edit-index").value = "";
 }
 
 function updateUI() {
@@ -190,13 +228,21 @@ function updateUI() {
     if (currentDate !== lastDate) {
       const dateHeader = document.createElement("div");
       dateHeader.classList.add("transaction-date-header");
-      dateHeader.innerText = currentDate;
+
+      // Formatowanie daty przed wyświetleniem
+      const formattedDate = formatDateForDisplay(currentDate); // Poprawione formatowanie daty
+      dateHeader.innerText = formattedDate;
+
       transactionList.appendChild(dateHeader);
       lastDate = currentDate;
     }
 
     const listItem = document.createElement("li");
     listItem.classList.add("transaction-item");
+
+    const amountClass =
+      transaction.type === "income" ? "income-amount" : "expense-amount";
+
     listItem.innerHTML = `
       <div class="transaction-details">
         <img src="${transaction.icon}" alt="Ikona" class="icon" />
@@ -204,7 +250,7 @@ function updateUI() {
           <span>${transaction.description}</span>
         </div>
       </div>
-      <span class="transaction-amount">${transaction.amount} PLN</span>
+      <span class="transaction-amount ${amountClass}">${transaction.amount} PLN</span>
       <div class="actions">
         <i class="fas fa-edit" onclick="editTransaction(${index})"></i>
         <i class="fas fa-trash-alt" onclick="deleteTransaction(${index})"></i>
@@ -214,27 +260,84 @@ function updateUI() {
   });
 
   updateBalance();
-  updateChart();
+}
+
+function filterTransactions(type) {
+  const transactionList = document.getElementById("wallet-transaction-list");
+  transactionList.innerHTML = "";
+
+  const filteredTransactions =
+    type === "all"
+      ? transactions
+      : transactions.filter((transaction) => transaction.type === type);
+
+  const sortedTransactions = filteredTransactions.sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    return dateB - dateA;
+  });
+
+  let lastDate = null;
+
+  sortedTransactions.forEach((transaction, index) => {
+    const currentDate = transaction.date;
+
+    if (currentDate !== lastDate) {
+      const dateHeader = document.createElement("div");
+      dateHeader.classList.add("transaction-date-header");
+      const formattedDate = formatDateForDisplay(currentDate); // Poprawione formatowanie daty
+      dateHeader.innerText = formattedDate;
+      transactionList.appendChild(dateHeader);
+      lastDate = currentDate;
+    }
+
+    const listItem = document.createElement("li");
+    listItem.classList.add("transaction-item");
+
+    const amountClass =
+      transaction.type === "income" ? "income-amount" : "expense-amount";
+
+    listItem.innerHTML = `
+      <div class="transaction-details">
+        <img src="${transaction.icon}" alt="Ikona" class="icon" />
+        <div class="transaction-info">
+          <span>${transaction.description}</span>
+        </div>
+      </div>
+      <span class="transaction-amount ${amountClass}">${transaction.amount} PLN</span>
+      <div class="actions">
+        <i class="fas fa-edit" onclick="editTransaction(${index})"></i>
+        <i class="fas fa-trash-alt" onclick="deleteTransaction(${index})"></i>
+      </div>
+    `;
+    transactionList.appendChild(listItem);
+  });
+
+  updateBalance();
 }
 
 function editTransaction(index) {
   const transaction = transactions[index];
-  document.getElementById("transaction-amount-display").innerText =
-    transaction.amount;
+  transactionAmountDisplay.innerText = transaction.amount;
   toggleTransactionType(transaction.type === "expense" ? "expenses" : "income");
-  document.getElementById("transaction-icon").value = transaction.icon;
-  document.getElementById("icon-preview").src = transaction.icon;
-  document.getElementById("transaction-description").value =
-    transaction.description;
+  transactionIcon.value = transaction.icon;
+  updateIconPreview();
+  transactionDescription.value = transaction.description;
+  editIndexInput.value = index;
 
-  document.getElementById("edit-index").value = index;
-
-  showAddTransactionModal(false);
+  showAddTransactionModal(true);
 }
 
 function deleteTransaction(index) {
-  transactions.splice(index, 1);
+  transactions.splice(index, 1); // Remove the transaction
   updateUI();
+  saveTransactions();
+
+  // Immediately filter transactions for the active filter in the Wallet
+  const activeFilter = document
+    .querySelector(".wallet-button.active")
+    .id.replace("-button", "");
+  filterTransactions(activeFilter);
 }
 
 function updateBalance() {
@@ -269,6 +372,114 @@ function updateBalance() {
   document.getElementById("balance-message").innerText = balanceMessage;
 }
 
+// Rejestracja pluginu, który będzie wyświetlał tekst w środku doughnuta
+// Rejestracja pluginu, który będzie wyświetlał tekst w środku doughnuta
+Chart.register({
+  id: "centerTextPlugin",
+  beforeDraw: function (chart) {
+    const ctx = chart.ctx;
+    const width = chart.width;
+    const height = chart.height;
+
+    // Oblicz sumy przychodów i wydatków
+    const totalIncome = chart.config._config.incomeData.reduce(
+      (sum, t) => sum + t.amount,
+      0
+    );
+    const totalExpense = chart.config._config.expenseData.reduce(
+      (sum, t) => sum + t.amount,
+      0
+    );
+
+    // Oblicz procent wykorzystanych środków
+    const percentageUsed = totalIncome
+      ? ((totalExpense / totalIncome) * 100).toFixed(0)
+      : 0;
+
+    // Ustawienie kolorów
+    const expenseColor = "#FF4D4D"; // Ciemny pastelowy czerwony
+    const incomeColor = "#2e8b57 "; // Ciemny pastelowy zielony
+    const percentageColor = document.body.classList.contains("dark-mode")
+      ? "#ffffff" // Biały w trybie ciemnym
+      : "#333333"; // Ciemny szary w trybie jasnym
+
+    // Resetuj kontekst i ustaw parametry tekstu
+    ctx.save();
+    ctx.clearRect(0, 0, width, height);
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.font = "bold 3em Segoe UI";
+
+    // Rysowanie procentów
+    ctx.fillStyle = percentageColor;
+    const centerX = width / 2;
+    const centerY = height / 2;
+    ctx.fillText(percentageUsed + "%", centerX, centerY - 10);
+
+    // Mniejsze fonty dla kwot przychodu i wydatków
+    ctx.font = "1.4em Segoe UI";
+
+    // Wydatki na czerwono
+    ctx.fillStyle = expenseColor;
+    ctx.fillText(totalExpense.toFixed(2) + " PLN", centerX, centerY + 30);
+
+    // Przychody na zielono
+    ctx.font = "1.1em Segoe UI";
+    ctx.fillStyle = incomeColor;
+    ctx.fillText(totalIncome.toFixed(2) + " PLN", centerX, centerY + 60);
+
+    ctx.restore();
+  },
+});
+
+function createLegend(groupedTransactions, chart) {
+  const legendContainer = document.getElementById("chart-legend");
+  legendContainer.innerHTML = ""; // Wyczyść poprzednią legendę
+
+  Object.values(groupedTransactions).forEach((transaction, index) => {
+    const categoryIconPath = Object.keys(categoryNames).find(
+      (key) => categoryNames[key] === transaction.category
+    );
+
+    const legendItem = document.createElement("div");
+    legendItem.classList.add("legend-item");
+
+    legendItem.innerHTML = `
+      <div class="legend-icon">
+        <img src="${categoryIconPath}" alt="${transaction.category}" />
+      </div>
+      <div class="legend-details">
+        <span class="legend-category">${transaction.category}</span>
+        <span>${transaction.count} Transactions</span>
+        <span>${transaction.amount.toFixed(2)} PLN</span>
+      </div>
+    `;
+
+    legendContainer.appendChild(legendItem);
+
+    let isHidden = false;
+
+    // Click event to toggle visibility
+    legendItem.addEventListener("click", function () {
+      const categoryIndex = chart.data.labels.indexOf(transaction.category);
+
+      // Toggle visibility for the category
+      isHidden = !isHidden;
+      chart.getDatasetMeta(0).data[categoryIndex].hidden = isHidden;
+
+      // Strike-through if hidden
+      if (isHidden) {
+        legendItem.classList.add("strike-through");
+      } else {
+        legendItem.classList.remove("strike-through");
+      }
+
+      // Update chart to reflect changes
+      chart.update();
+    });
+  });
+}
+
 function updateChart() {
   const ctx = document.getElementById("expense-chart").getContext("2d");
 
@@ -276,159 +487,217 @@ function updateChart() {
     chartInstance.destroy();
   }
 
-  const expenseData = transactions
-    .filter((transaction) => transaction.type === "expense")
-    .map((transaction) => ({
-      amount: parseFloat(transaction.amount),
-      category: transaction.icon,
-    }));
+  // Group transactions by category
+  const groupedTransactions = transactions.reduce((acc, transaction) => {
+    const category = categoryNames[transaction.icon];
+    if (!acc[category]) {
+      acc[category] = {
+        category: category,
+        amount: 0,
+        count: 0, // Number of transactions in each category
+        type: transaction.type,
+      };
+    }
+    acc[category].amount += parseFloat(transaction.amount);
+    acc[category].count += 1; // Increase transaction count
+    return acc;
+  }, {});
 
-  const categories = [...new Set(expenseData.map((t) => t.category))];
-  const expenses = categories.map((category) =>
-    expenseData
-      .filter((t) => t.category === category)
-      .reduce((sum, t) => sum + t.amount, 0)
+  const expenseData = Object.values(groupedTransactions).filter(
+    (t) => t.type === "expense"
+  );
+  const incomeData = Object.values(groupedTransactions).filter(
+    (t) => t.type === "income"
   );
 
-  const categoryNames = {
-    "Iconsexpenses/Jedzenie.svg": "Jedzenie",
-    "Iconsexpenses/Zakupy.svg": "Zakupy",
-    "Iconsexpenses/Samochód.svg": "Samochód",
-    "Iconsexpenses/Czynsz.svg": "Czynsz",
-    "Iconsexpenses/Zdrowie.svg": "Zdrowie",
-    "Iconsexpenses/Edukacja.svg": "Edukacja",
-    "Iconsexpenses/Rozrywka.svg": "Rozrywka",
-    "Iconsexpenses/Paliwo.svg": "Paliwo",
-    "Iconsexpenses/Opłaty.svg": "Opłaty",
-  };
-
-  const friendlyLabels = categories.map((category) => categoryNames[category]);
-
-  const colors = [
-    "#FF6384",
-    "#36A2EB",
-    "#FFCE56",
-    "#4BC0C0",
-    "#9966FF",
-    "#FF9F40",
+  const allCategories = [
+    ...expenseData.map((t) => t.category),
+    ...incomeData.map((t) => t.category),
+  ];
+  const allAmounts = [
+    ...expenseData.map((t) => t.amount),
+    ...incomeData.map((t) => t.amount),
   ];
 
+  const colors = {
+    Food: "#FF6666",
+    Shopping: "#FF9999",
+    Car: "#FF8080",
+    Rent: "#FFB3B3",
+    Health: "#FF4D4D",
+    Education: "#FF1A1A",
+    Entertainment: "#FFA6A6",
+    Fuel: "#FFCCCC",
+    Bills: "#FF5252",
+    Salary: "#99FF99",
+    Bonus: "#66FF66",
+    "Savings Account": "#80FF80",
+    Investment: "#4DFF4D",
+    Inheritance: "#33FF33",
+  };
+
+  const allColors = allCategories.map((category) => colors[category]);
+
+  // Doughnut chart setup
   chartInstance = new Chart(ctx, {
-    type: "pie",
+    type: "doughnut",
     data: {
-      labels: friendlyLabels,
+      labels: allCategories,
       datasets: [
         {
-          data: expenses,
-          backgroundColor: colors.slice(0, categories.length),
+          data: allAmounts,
+          backgroundColor: allColors,
+          borderColor: "#ffffff",
+          borderWidth: 2,
+          cutout: "70%", // Doughnut cutout
         },
       ],
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      animation: { duration: 2000, easing: "easeOutBounce" },
       plugins: {
-        legend: {
-          display: false,
-        },
+        legend: { display: false },
         tooltip: {
           callbacks: {
             label: function (context) {
-              let label = context.label || "";
-
-              if (label) {
-                label += ": ";
-              }
-              if (context.parsed !== null) {
-                label += context.parsed + " PLN";
-              }
-              return label;
+              return `${context.label}: ${context.raw} PLN`;
             },
           },
         },
+        // Plugin for center text
       },
     },
+    incomeData: incomeData, // Przekazanie danych o przychodach i wydatkach
+    expenseData: expenseData,
   });
 
-  createCustomLegend(categories, colors);
+  // Update legend with interaction
+  createLegend(groupedTransactions, chartInstance);
 }
-
-function createCustomLegend(categories, colors) {
-  const legendContainer = document.getElementById("chart-legend");
-  legendContainer.innerHTML = "";
-
-  categories.forEach((category, index) => {
-    const legendItem = document.createElement("div");
-    legendItem.style.display = "flex";
-    legendItem.style.alignItems = "center";
-    legendItem.style.marginBottom = "8px";
-
-    const colorBox = document.createElement("span");
-    colorBox.style.backgroundColor = colors[index];
-    colorBox.style.width = "20px";
-    colorBox.style.height = "20px";
-    colorBox.style.display = "inline-block";
-    colorBox.style.marginRight = "8px";
-
-    const icon = document.createElement("img");
-    icon.src = category;
-    icon.style.width = "20px";
-    icon.style.height = "20px";
-    icon.style.marginRight = "8px";
-
-    legendItem.appendChild(colorBox);
-    legendItem.appendChild(icon);
-    legendContainer.appendChild(legendItem);
-  });
-}
-
-document.querySelectorAll(".key").forEach((key) => {
-  key.addEventListener("click", () => {
-    let amountDisplay = document.getElementById("transaction-amount-display");
-    let currentAmount =
-      amountDisplay.innerText === "0.00" ? "" : amountDisplay.innerText;
-
-    if (key.innerHTML === "&#10004;" || key.innerHTML === "✔") {
-      addTransaction();
-    } else if (key.innerText === "C") {
-      amountDisplay.innerText = "0.00";
-    } else if (key.innerText === "←") {
-      amountDisplay.innerText = currentAmount.slice(0, -1) || "0.00";
-    } else {
-      if (
-        currentAmount.includes(".") &&
-        currentAmount.split(".")[1].length >= 2
-      ) {
-        return;
-      }
-      amountDisplay.innerText =
-        (currentAmount + key.innerText).replace(/^0+/, "") || "0.00";
-    }
-  });
-});
-
-function switcher() {
-  document.body.classList.toggle("dark-mode");
-}
+// Nasłuchiwanie kliknięcia na przełącznik
+document;
 
 function filterTransactions(type) {
   const transactionList = document.getElementById("wallet-transaction-list");
   transactionList.innerHTML = "";
 
-  document.querySelectorAll(".wallet-button").forEach((button) => {
-    button.classList.remove("active");
+  // Filtrowanie transakcji na podstawie typu (wydatki, przychody lub wszystkie)
+  const filteredTransactions =
+    type === "all"
+      ? transactions
+      : transactions.filter((transaction) => transaction.type === type);
+
+  // Sortowanie transakcji według daty malejąco (najnowsze pierwsze)
+  const sortedTransactions = filteredTransactions.sort((a, b) => {
+    const dateA = new Date(a.date); // Upewniamy się, że używany jest format ISO
+    const dateB = new Date(b.date);
+    return dateB - dateA;
   });
 
-  if (type === "expense") {
-    document.getElementById("expense-button").classList.add("active");
-  } else if (type === "income") {
-    document.getElementById("income-button").classList.add("active");
+  let lastDate = null;
+
+  sortedTransactions.forEach((transaction, index) => {
+    const currentDate = transaction.date;
+
+    // Wyświetlamy nagłówek z datą tylko jeśli jest nowa data
+    if (currentDate !== lastDate) {
+      const dateHeader = document.createElement("div");
+      dateHeader.classList.add("transaction-date-header");
+
+      // Formatowanie daty przed wyświetleniem (użycie formatDateForDisplay)
+      const formattedDate = formatDateForDisplay(currentDate); // Upewniamy się, że data jest formatowana
+      dateHeader.innerText = formattedDate;
+
+      transactionList.appendChild(dateHeader);
+      lastDate = currentDate;
+    }
+
+    const listItem = document.createElement("li");
+    listItem.classList.add("transaction-item");
+
+    const amountClass =
+      transaction.type === "income" ? "income-amount" : "expense-amount";
+
+    listItem.innerHTML = `
+      <div class="transaction-details">
+        <img src="${transaction.icon}" alt="Ikona" class="icon" />
+        <div class="transaction-info">
+          <span>${transaction.description}</span>
+        </div>
+      </div>
+      <span class="transaction-amount ${amountClass}">${transaction.amount} PLN</span>
+      <div class="actions">
+        <i class="fas fa-edit" onclick="editTransaction(${index})"></i>
+        <i class="fas fa-trash-alt" onclick="deleteTransaction(${index})"></i>
+      </div>
+    `;
+    transactionList.appendChild(listItem);
+  });
+}
+
+function formatDateForDisplay(isoDate) {
+  const date = new Date(isoDate);
+  const options = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    weekday: "long", // Dzień tygodnia po polsku
+  };
+
+  // Formatowanie daty jako "środa, 04.09.2024"
+  return date.toLocaleDateString("pl-PL", options);
+}
+
+function handleKeyClick(event) {
+  const key = event.target.innerText;
+  const currentAmount = transactionAmountDisplay.innerText;
+
+  if (key === "C") {
+    transactionAmountDisplay.innerText = "0.00";
+  } else if (key === "←") {
+    transactionAmountDisplay.innerText = currentAmount.slice(0, -1) || "0";
+  } else if (key === "✔") {
+    handleTransactionSubmit(event);
   } else {
-    document.getElementById("all-button").classList.add("active");
+    if (currentAmount === "0.00" && key !== ".") {
+      transactionAmountDisplay.innerText = key;
+    } else {
+      transactionAmountDisplay.innerText = currentAmount + key;
+    }
   }
+}
+
+document.addEventListener("keydown", function (event) {
+  const isDescriptionFocused =
+    document.activeElement ===
+    document.getElementById("transaction-description");
+
+  if (!isDescriptionFocused) {
+    if (!isNaN(event.key) || event.key === ".") {
+      event.preventDefault();
+      handleKeyClick({ target: { innerText: event.key } });
+    } else if (event.key === "Enter") {
+      handleTransactionSubmit(event);
+    } else if (event.key === "Backspace") {
+      event.preventDefault();
+      handleKeyClick({ target: { innerText: "←" } });
+    }
+  }
+});
+document.querySelectorAll(".key").forEach((key) => {
+  key.addEventListener("click", handleKeyClick);
+});
+
+function filterTransactions(type) {
+  const transactionList = document.getElementById("wallet-transaction-list");
+  transactionList.innerHTML = "";
 
   const filteredTransactions =
-    type === "all" ? transactions : transactions.filter((t) => t.type === type);
+    type === "all"
+      ? transactions
+      : transactions.filter((transaction) => transaction.type === type);
 
   const sortedTransactions = filteredTransactions.sort((a, b) => {
     const dateA = new Date(a.date);
@@ -438,7 +707,7 @@ function filterTransactions(type) {
 
   let lastDate = null;
 
-  sortedTransactions.forEach((transaction) => {
+  sortedTransactions.forEach((transaction, index) => {
     const currentDate = transaction.date;
 
     if (currentDate !== lastDate) {
@@ -451,6 +720,10 @@ function filterTransactions(type) {
 
     const listItem = document.createElement("li");
     listItem.classList.add("transaction-item");
+
+    const amountClass =
+      transaction.type === "income" ? "income-amount" : "expense-amount";
+
     listItem.innerHTML = `
       <div class="transaction-details">
         <img src="${transaction.icon}" alt="Ikona" class="icon" />
@@ -458,8 +731,109 @@ function filterTransactions(type) {
           <span>${transaction.description}</span>
         </div>
       </div>
-      <span class="transaction-amount">${transaction.amount} PLN</span>
+      <span class="transaction-amount ${amountClass}">${transaction.amount} PLN</span>
+      <div class="actions">
+        <i class="fas fa-edit" onclick="editTransaction(${index})"></i>
+        <i class="fas fa-trash-alt" onclick="deleteTransaction(${index})"></i>
+      </div>
     `;
     transactionList.appendChild(listItem);
   });
 }
+
+function addTransaction() {
+  const amount = parseFloat(transactionAmountDisplay.innerText);
+  const description = transactionDescription.value.trim();
+
+  if (isNaN(amount) || amount <= 0) {
+    alert("Proszę wprowadzić kwotę.");
+    return;
+  }
+
+  if (!description) {
+    alert("Proszę dodać opis.");
+    return;
+  }
+
+  const type = expenseButton.classList.contains("active")
+    ? "expense"
+    : "income";
+  const icon = transactionIcon.value;
+
+  // Pobieramy datę w formacie ISO z atrybutu data-date
+  const date = document
+    .querySelector(".date-display")
+    .getAttribute("data-date");
+
+  const transactionData = {
+    amount: amount.toFixed(2),
+    type: type,
+    icon: icon,
+    description: description,
+    date: date, // Data w formacie ISO
+  };
+
+  transactions.push(transactionData);
+  updateUI();
+  saveTransactions();
+  closeTransactionModal();
+
+  // Filtrujemy transakcje w portfelu natychmiast po dodaniu transakcji
+  const activeFilter = document
+    .querySelector(".wallet-button.active")
+    .id.replace("-button", "");
+  filterTransactions(activeFilter);
+}
+
+document.getElementById("expense-button").addEventListener("click", () => {
+  filterTransactions("expense");
+  activateButton("expense-button");
+});
+document.getElementById("income-button").addEventListener("click", () => {
+  filterTransactions("income");
+  activateButton("income-button");
+});
+document.getElementById("all-button").addEventListener("click", () => {
+  filterTransactions("all");
+  activateButton("all-button");
+});
+
+function activateButton(buttonId) {
+  document.querySelectorAll(".wallet-button").forEach((button) => {
+    button.classList.remove("active");
+  });
+  document.getElementById(buttonId).classList.add("active");
+}
+
+const themeToggle = document.querySelector(".theme-toggle");
+const bodyClassList = document.body.classList;
+
+themeToggle.addEventListener("click", () => {
+  if (bodyClassList.contains("dark-mode")) {
+    enableLightMode();
+  } else {
+    enableDarkMode();
+  }
+
+  updateChart();
+});
+
+function enableDarkMode() {
+  bodyClassList.add("dark-mode");
+  bodyClassList.remove("light-mode");
+}
+
+function enableLightMode() {
+  bodyClassList.add("light-mode");
+  bodyClassList.remove("dark-mode");
+}
+
+const setThemePreference = () => {
+  if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    enableDarkMode();
+  } else {
+    enableLightMode();
+  }
+
+  setThemePreference();
+};

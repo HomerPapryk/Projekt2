@@ -33,8 +33,7 @@
             </div>
           </section>
           <section class="transaction-section">
-            <ul id="transaction-list" class="transaction-list">
-            </ul>
+            <ul id="transaction-list" class="transaction-list"></ul>
           </section>
         </main>
       </div>
@@ -59,117 +58,103 @@
             </div>
           </section>
           <div class="wallet-type-switch">
-            <button class="wallet-button active" id="expense-button" onclick="filterTransactions('expense')">Wydatki</button>
-            <button class="wallet-button" id="income-button" onclick="filterTransactions('income')">Przychód</button>
-            <button class="wallet-button" id="all-button" onclick="filterTransactions('all')">Zobacz wszystkie</button>
+            <button class="wallet-button active" id="expense-button">Wydatki</button>
+            <button class="wallet-button" id="income-button">Przychód</button>
+            <button class="wallet-button" id="all-button">Zobacz wszystkie</button>
           </div>
 
-          <ul id="wallet-transaction-list" class="transaction-list">
-          </ul>
+          <ul id="wallet-transaction-list" class="transaction-list"></ul>
         </main>
       </div>
-<div id="chart-page" class="page">
-  <header class="app-header">
-    <div class="header-center">
-      <h1>Wykresy</h1>
+      <div id="chart-page" class="page">
+        <header class="app-header">
+          <div class="header-center">
+            <h1>Wykresy</h1>
+          </div>
+          <div class="header-right">
+            <img src="Avatar/woman-6466907_640.jpg" alt="User Avatar" class="avatar" />
+          </div>
+        </header>
+        <main>
+          <section class="balance-section">
+            <div class="balance-box">
+              <span id="chart-balance">0 PLN</span>
+              <p id="chart-message">Pozostałe środki</p>
+            </div>
+          </section>
+          <section class="chart-section">
+            <h2>Wykres wydatków i przychodów</h2>
+            <div class="chart-container">
+              <canvas id="expense-chart"></canvas>
+            </div>
+            <div id="chart-legend"></div> 
+          </section>
+        </main>
     </div>
-    <div class="header-right">
-      <img src="Avatar/woman-6466907_640.jpg" alt="User Avatar" class="avatar" />
-    </div>
-  </header>
 
-  <main>
-    <section class="balance-section">
-      <div class="balance-box">
-        <span id="chart-balance">0 PLN</span>
-      </div>
-    </section>
-
-    <section class="chart-section">
-      <h3>Wykres wydatków</h3>
-      <div class="chart-container">
-        <canvas id="expense-chart"></canvas>
-      </div>
-      <div id="chart-legend"></div> 
-    </section>
-  </main>
-</div>
-
-<footer class="app-footer">
-  <nav class="footer-nav">
-    <button class="nav-button" onclick="navigateTo('home')">
-      <i class="fas fa-home"></i>
-    </button>
-    <button class="nav-button" onclick="navigateTo('wallet')">
-      <i class="fas fa-wallet"></i>
-    </button>
-    <button class="nav-button large" onclick="showAddTransactionModal()">
-      <i class="fas fa-plus"></i>
-    </button>
-    <button class="nav-button" onclick="navigateTo('chart')">
-      <i class="fas fa-chart-pie"></i>
-    </button>
-    <button class="nav-button" id="toggle-button" onclick="switcher()">
-      <div class="mover">
-        <svg class="icon sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="5"></circle>
-          <line x1="12" y1="1" x2="12" y2="3"></line>
-          <line x1="12" y1="21" x2="12" y2="23"></line>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-          <line x1="1" y1="12" x2="3" y2="12"></line>
-          <line x1="21" y1="12" x2="23" y2="12"></line>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-        </svg>
-        <svg class="icon moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-        </svg>
-      </div>
-    </button>
-  </nav>
-</footer>
+      <footer class="app-footer">
+        <nav class="footer-nav">
+          <button class="nav-button" id="home-nav-button">
+            <i class="fas fa-home"></i>
+          </button>
+          <button class="nav-button" id="wallet-nav-button">
+            <i class="fas fa-wallet"></i>
+          </button>
+          <button class="nav-button large" id="add-transaction-button">
+            <i class="fas fa-plus"></i>
+          </button>
+          <button class="nav-button" id="chart-nav-button">
+            <i class="fas fa-chart-pie"></i>
+          </button>
+          <button class="theme-toggle">
+            <ion-icon id="sunny" name="sunny"></ion-icon>
+            <ion-icon id="moon" name="moon"></ion-icon>
+          </button>
+        </nav>
+      </footer>
 
       <div id="transaction-modal" class="modal">
         <div class="modal-content">
-          <span class="close-btn" onclick="closeTransactionModal()">&times;</span> 
-                <div class="transaction-type-switch">
-            <button id="modal-expenses-button" class="active">expenses</button>
-            <button id="modal-income-button">income</button>
-          </div>
-                <div class="date-selector" id="date-selector">
-          </div>
-    <input type="hidden" id="edit-index" value="">
-                <div class="amount-display">
-            <span id="currency-symbol">PLN</span>
-            <span id="transaction-amount-display">0.00</span>
-          </div>
-                <div class="transaction-info">
-            <img id="icon-preview" src="Iconsexpenses/Jedzenie.svg" alt="Ikona" style="width:30px; height:30px; vertical-align:middle;">
-            <select id="transaction-icon">
-            </select>
-            <input type="text" id="transaction-description" placeholder="Opis" />
-          </div>
+          <span class="close-btn" id="close-transaction-modal">&times;</span>
+          <form id="transaction-form">
+            <div class="transaction-type-switch">
+              <button type="button" id="modal-expenses-button" class="active">Expenses</button>
+              <button type="button" id="modal-income-button">Income</button>
+            </div>
+            <div class="date-selector" id="date-selector"></div>
+            <input type="hidden" id="edit-index" value="">
+            <div class="amount-display">
+              <span id="currency-symbol">PLN</span>
+              <span id="transaction-amount-display">0.00</span>
+            </div>
+            <div class="transaction-info">
+              <img id="icon-preview" src="Iconsexpenses/Food.svg" alt="Ikona" style="width:30px; height:30px; vertical-align:middle;">
+              <select id="transaction-icon"></select>
+              <input type="text" id="transaction-description" placeholder="Opis" required/>
+            </div>
             <div class="keyboard">
-            <div class="key">1</div>
-            <div class="key">2</div>
-            <div class="key">3</div>
-            <div class="key">C</div> 
-            <div class="key">4</div>
-            <div class="key">5</div>
-            <div class="key">6</div>
-            <div class="key">←</div> 
-            <div class="key">7</div>
-            <div class="key">8</div>
-            <div class="key">9</div>
-            <div class="key">.</div> 
-            <div class="key large">0</div> 
-            <div class="key large">&#10004;</div> 
-          </div>
+              <div class="key">1</div>
+              <div class="key">2</div>
+              <div class="key">3</div>
+              <div class="key">C</div>
+              <div class="key">4</div>
+              <div class="key">5</div>
+              <div class="key">6</div>
+              <div class="key">←</div>
+              <div class="key">7</div>
+              <div class="key">8</div>
+              <div class="key">9</div>
+              <div class="key">.</div>
+              <div class="key large">0</div>
+              <div class="key large" id="submit-transaction">&#10004;</div>
+            </div>
+          </form>
         </div>
       </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js"></script>
+     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
   </body>
 </html>

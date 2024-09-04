@@ -1,4 +1,4 @@
-/* Definicje zmiennych kolorystycznych */
+/* Zmienna kolorów dla jasnego i ciemnego trybu */
 :root {
   --background-light: #f4f4f4;
   --text-light: #333;
@@ -39,6 +39,21 @@
   --date-item-selected-dark: #333;
 }
 
+/* Ogólne stylowanie aplikacji */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-light);
+  color: var(--text-light);
+  transition: background-color 400ms ease;
+}
+
+.dark-mode {
+  background-color: var(--background-dark);
+  color: var(--text-dark);
+}
+
 .app {
   position: relative;
 }
@@ -52,314 +67,24 @@
   height: 100%;
   background: rgba(255, 255, 255, 0.5);
   backdrop-filter: blur(5px);
-  z-index: 999; /* Ustawienie poniżej modala */
-  pointer-events: none; /* Umożliwia interakcje z modalem */
-}
-body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: var(--background-light);
-  color: var(--text-light);
-  transition: background-color 0.3s, color 0.3s;
+  z-index: 999;
+  pointer-events: none;
 }
 
-body.dark-mode {
-  background-color: var(--background-dark);
-  color: var(--text-dark);
-}
-
-/* Stylizacja nagłówka */
+/* Stylowanie nagłówka */
 .app-header {
   background-color: var(--header-background-light);
   border-bottom: 1px solid var(--border-light);
-  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-}
-
-body.dark-mode .app-header {
-  background-color: var(--header-background-dark);
-  border-bottom: 1px solid var(--border-dark);
-}
-
-/* Stylizacja sekcji balance */
-.balance-box {
-  background-color: var(--box-background-light);
-  color: var(--box-text-light);
-  border: 1px solid var(--border-light);
-  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-  flex-shrink: 0;
-  padding: 10px;
-  text-align: center;
-}
-
-.transaction-list-container {
-  flex: 1;
-  overflow-y: auto;
-}
-
-body.dark-mode .balance-box {
-  background-color: var(--box-background-dark);
-  color: var(--box-text-dark);
-  border: 1px solid var(--border-dark);
-}
-
-.transaction-list-container {
-  flex-grow: 1;
-  overflow-y: auto;
-}
-
-/* Stylizacja listy transakcji */
-#transaction-list,
-#wallet-transaction-list {
-  list-style-type: none;
-  padding: 0;
-}
-
-#wallet-transaction-list {
-  list-style-type: none;
-  padding: 0;
-  margin-left: 15px;
-  margin-right: 15px;
-}
-
-#transaction-list li,
-#wallet-transaction-list li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-#transaction-list li .actions,
-#wallet-transaction-list li .actions {
-  display: flex;
-  gap: 15px;
-}
-
-#transaction-list .icon,
-#wallet-transaction-list .icon {
-  width: 50px;
-  height: 50px;
-}
-
-body.dark-mode #transaction-list li,
-body.dark-mode #wallet-transaction-list li {
-  background-color: var(--transaction-background-dark);
-  border: 1px solid var(--transaction-border-dark);
-}
-
-/* Stylizacja stopki */
-.app-footer {
-  background-color: var(--footer-background-light);
-  border-top: 1px solid var(--border-light);
-  padding: 10px 0;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  overflow: hidden;
-}
-
-body.dark-mode .app-footer {
-  background-color: var(--footer-background-dark);
-  border-top: 1px solid var(--border-dark);
-}
-
-/* Stylizacja przycisków nawigacyjnych */
-.nav-button {
-  color: var(--nav-button-light);
-  transition: color 0.3s;
-}
-
-body.dark-mode .nav-button {
-  color: var(--nav-button-dark);
-}
-
-/* ikony */
-
-.transaction-details .icon {
-  width: 10px;
-  height: 10px;
-  display: block;
-  opacity: 1;
-  position: static;
-}
-
-/* Klawiatura */
-body.dark-mode .key {
-  background-color: #444;
-  color: #ffffff;
-}
-
-body.dark-mode .transaction-date-header {
-  font-weight: bold;
-  margin: 15px 0 5px 0;
-  padding: 5px;
-  background-color: #535353;
-  border-radius: 5px;
-}
-
-body.dark-mode .key:last-child {
-  background-color: #ffffff;
-  color: #000000;
-}
-
-/* Kwota */
-body.dark-mode .amount-display {
-  color: #ffffff;
-}
-
-/* Wybór ikony i opis */
-body.dark-mode .transaction-info select,
-body.dark-mode #transaction-description {
-  background-color: #333;
-  color: #ffffff;
-  border: 1px solid #555;
-}
-
-/* Stylizacja przycisku dodaj */
-body.dark-mode .modal-button {
-  background-color: #ffffff;
-  color: #000000;
-}
-
-/* Napis income */
-body.dark-mode .transaction-type-switch button:not(.active) {
-  color: #777;
-}
-
-/* Przyciski zamknięcia (X) */
-body.dark-mode .close-btn {
-  color: #ffffff;
-}
-
-/* Napis w portfelu */
-body.dark-mode .wallet-type-switch button:not(.active),
-body.dark-mode .transaction-type-switch button:not(.active) {
-  color: #999;
-}
-
-/* Stylizacja modala */
-.modal-content {
-  background-color: var(--modal-background-light);
-  transition: background-color 0.3s;
-}
-
-body.dark-mode .modal-content {
-  background-color: var(--modal-background-dark);
-}
-
-/* Stylizacja przycisków w modalu */
-.modal-button {
-  background-color: var(--modal-button-light);
-  color: var(--text-light);
-  transition: background-color 0.3s, color 0.3s;
-}
-
-body.dark-mode .modal-button {
-  background-color: var(--modal-button-dark);
-  color: var(--text-dark);
-}
-
-/* Stylizacja przycisków klawiatury */
-.key {
-  background-color: var(--key-background-light);
-  transition: background-color 0.3s;
-}
-
-.key:hover {
-  background-color: var(--key-hover-light);
-}
-
-body.dark-mode .key {
-  background-color: var(--key-background-dark);
-}
-
-body.dark-mode .key:hover {
-  background-color: var(--key-hover-dark);
-}
-
-body.dark-mode .key:last-child {
-  background-color: var(--key-active-dark);
-  color: var(#939393);
-}
-
-/* Stylizacja aktywnego portfela */
-.wallet-button.active {
-  background-color: var(--wallet-button-active-light);
-  color: var(--text-light);
-  transition: background-color 0.3s, color 0.3s;
-}
-
-body.dark-mode .wallet-button.active {
-  background-color: var(--wallet-button-active-dark);
-  color: var(--text-dark);
-}
-
-/* Stylizacja aktywnego typu transakcji */
-.transaction-type-switch button.active {
-  background-color: var(--transaction-type-active-light);
-  color: var(--text-light);
-  transition: background-color 0.3s, color 0.3s;
-}
-
-body.dark-mode .transaction-type-switch button.active {
-  background-color: var(--transaction-type-active-dark);
-  color: var(--text-dark);
-}
-
-/* Stylizacja wybranej daty */
-.date-item.selected {
-  background-color: var(--date-item-selected-light);
-  color: var(--text-light);
-  transition: background-color 0.3s, color 0.3s;
-}
-
-body.dark-mode .date-item.selected {
-  background-color: var(--date-item-selected-dark);
-  color: var(--text-dark);
-}
-
-/* Styl dla ciemnego trybu */
-.dark-mode .app-footer {
-  background-color: #333333;
-  color: #ffffff;
-}
-
-.dark-mode .app-footer .nav-button {
-  color: #ffffff;
-}
-
-.dark-mode .nav-button.large {
-  background-color: #ffffff;
-  color: #000000;
-  padding: 15px;
-  font-size: 2rem;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-}
-
-.page {
-  display: none;
-}
-
-.page.active {
-  display: block;
-}
-
-.app-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #ddd;
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.dark-mode .app-header {
+  background-color: var(--header-background-dark);
+  border-bottom: 1px solid var(--border-dark);
 }
 
 .header-center h1 {
@@ -375,9 +100,48 @@ body.dark-mode .date-item.selected {
   object-fit: cover;
 }
 
+/* Stylowanie sekcji balance */
+.balance-box {
+  background-color: var(--box-background-light);
+  color: var(--box-text-light);
+  border: 1px solid var(--border-light);
+  flex-shrink: 0;
+  padding: 10px;
+  text-align: center;
+  border-radius: 20px;
+  font-size: 2rem;
+  margin: 10px;
+  transition: background-color 400ms ease;
+}
+
+.dark-mode .balance-box {
+  background-color: var(--box-background-dark);
+  color: var(--box-text-dark);
+  border: 1px solid var(--border-dark);
+}
+
 .balance-section {
   text-align: center;
   margin: 20px 0;
+}
+
+#total-balance {
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--box-text-light);
+}
+
+#balance-message {
+  font-size: 1.2rem;
+  font-weight: normal;
+  color: var(--box-text-light);
+}
+
+/* Stylowanie listy transakcji */
+.transaction-list,
+.wallet-transaction-list {
+  list-style-type: none;
+  padding: 0;
 }
 
 .transaction-item {
@@ -385,18 +149,16 @@ body.dark-mode .date-item.selected {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  border-bottom: 1px solid #ddd;
-  background-color: #fff;
+  border-bottom: 1px solid var(--border-light);
+  background-color: var(--transaction-background-light);
   border-radius: 5px;
   margin-bottom: 10px;
+  transition: background-color 400ms ease;
 }
 
-.transaction-date-header {
-  font-weight: bold;
-  margin: 15px 0 5px 0;
-  padding: 5px;
-  background-color: #f0f0f0;
-  border-radius: 5px;
+.dark-mode .transaction-item {
+  background-color: var(--transaction-background-dark);
+  border: 1px solid var(--transaction-border-dark);
 }
 
 .transaction-details {
@@ -405,46 +167,6 @@ body.dark-mode .date-item.selected {
   gap: 20px;
 }
 
-.transaction-amount {
-  margin-left: auto;
-  padding-right: 100px;
-}
-
-.transaction-section {
-  padding: 20px;
-}
-
-.balance-box {
-  background-color: #000000;
-  color: #ffffff;
-  padding: 20px;
-  border-radius: 20px;
-  border: 1px solid #ddd;
-  font-size: 2rem;
-  margin: 10px;
-}
-
-.transaction-date-header {
-  font-weight: bold;
-  margin: 15px 0 5px 0;
-  padding: 5px;
-  background-color: #f0f0f0;
-  border-radius: 5px;
-}
-
-.transaction-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-}
-
-.transaction-details {
-  display: flex;
-  align-items: center;
-}
-
 .transaction-info {
   margin-left: 10px;
 }
@@ -458,94 +180,34 @@ body.dark-mode .date-item.selected {
   font-weight: bold;
   margin: 15px 0 5px 0;
   padding: 5px;
-  background-color: #f0f0f0;
+  background-color: var(--transaction-background-light);
   border-radius: 5px;
 }
 
-.transaction-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+.dark-mode .transaction-date-header {
+  background-color: var(--transaction-background-dark);
 }
 
-.transaction-details {
-  display: flex;
-  align-items: center;
+.transaction-list-container {
+  flex-grow: 1;
+  overflow-y: auto;
 }
 
-.transaction-info {
-  margin-left: 10px;
-}
-
-.transaction-amount {
-  margin-left: auto;
-  padding-right: 10px;
-}
-
-#transaction-description {
-  width: 50%;
-  padding: 5px;
-  font-size: 0.9rem;
-  border-radius: 5px;
-  border: 1px solid #000000;
-  box-sizing: border-box;
-}
-
-.transaction-info {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 10px;
-}
-
-.transaction-info img {
-  width: 30px;
-  height: 30px;
-  margin-right: 10px;
-}
-
-#transaction-icon option {
-  display: flex;
-  align-items: center;
-}
-
-#transaction-icon option img {
-  width: 20px;
-  height: 20px;
-  margin-right: 8px;
-}
-
-.icon {
-  width: 24px;
-  height: 24px;
-}
-
-#balance-message,
-#wallet-message {
-  margin-top: 10px;
-  font-size: 1rem;
-}
-
-.icon {
-  width: 24px;
-  height: 24px;
-}
-
-.chart-page,
-.settings-page,
-.wallet-page {
-  padding: 20px;
-}
-
+/* Stylowanie stopki */
 .app-footer {
-  background-color: #ffffff;
-  border-top: 1px solid #ddd;
+  background-color: var(--footer-background-light);
+  border-top: 1px solid var(--border-light);
   padding: 10px 0;
   position: fixed;
   bottom: 0;
   width: 100%;
+  overflow: hidden;
+  transition: background-color 400ms ease;
+}
+
+.dark-mode .app-footer {
+  background-color: var(--footer-background-dark);
+  border-top: 1px solid var(--border-dark);
 }
 
 .footer-nav {
@@ -564,46 +226,11 @@ body.dark-mode .date-item.selected {
   padding: 0;
   font-size: 1.5rem;
   transition: color 0.3s ease;
+  color: var(--nav-button-light);
 }
 
-.mover {
-  position: relative;
-  width: 30px;
-  height: 30px;
-  overflow: hidden;
-}
-
-.icon {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.5s ease, opacity 0.5s ease;
-  opacity: 0;
-}
-
-.sun {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.moon {
-  transform: translateY(-42px);
-}
-
-body.dark-mode .sun {
-  transform: translateY(42px);
-  opacity: 0;
-}
-
-body.dark-mode .moon {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-body.dark-mode .nav-button {
-  color: var(--nav-button-dark, #ffffff);
+.dark-mode .nav-button {
+  color: var(--nav-button-dark);
 }
 
 .nav-button.large {
@@ -616,53 +243,106 @@ body.dark-mode .nav-button {
   height: 60px;
 }
 
-.amount-display {
-  font-size: 2.5rem;
-  margin: 20px 0;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: baseline;
-  color: #000;
-  text-align: center;
-  width: 100%;
+/* Stylowanie ikon */
+.icon {
+  width: 24px;
+  height: 24px;
 }
 
+.dark-mode .icon {
+  filter: brightness(0) invert(1);
+}
+
+/* Klawiatura */
 .keyboard {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
-  margin-top: 20px;
   width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
 .keyboard .key {
-  font-size: 1.5rem;
+  background-color: var(--key-background-light);
   padding: 15px 0;
+  border-radius: 10px;
+  font-size: 1.2rem;
   text-align: center;
-  background-color: #f0f0f0;
-  border-radius: 50%;
-  user-select: none;
-}
-.key {
-  background-color: #f0f0f0;
-  padding: 20px;
-  border-radius: 50%;
-  font-size: 1.5rem;
   cursor: pointer;
-  text-align: center;
-  transition: background-color 0.3s ease;
+  width: 100%;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 400ms ease;
 }
 
-.key:hover {
-  background-color: #e0e0e0;
+.keyboard .key.large {
+  grid-column: span 2;
+  height: 60px;
 }
 
-.key:last-child {
-  background-color: #000;
+.keyboard .key:nth-child(12) {
+  background-color: #b3d9ff;
+  color: white;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.keyboard .key:nth-child(8) {
+  background-color: #fff3b3;
+  color: black;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.keyboard .key:nth-child(4) {
+  background-color: #ffc1b3;
+  color: white;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.keyboard .key:last-child {
+  background-color: var(--key-active-light);
   color: #fff;
 }
 
+.keyboard .key:hover {
+  background-color: var(--key-hover-light);
+}
+
+.dark-mode .key {
+  background-color: var(--key-background-dark);
+}
+
+.dark-mode .key:hover {
+  background-color: var(--key-hover-dark);
+}
+
+.dark-mode .key:last-child {
+  background-color: var(--key-active-dark);
+  color: #939393;
+}
+
+.keyboard .key:nth-child(12):hover {
+  background-color: #99c2e6; /* Slightly darker than #b3d9ff */
+}
+
+.keyboard .key:nth-child(8):hover {
+  background-color: #e6d29c; /* Slightly darker than #fff3b3 */
+}
+
+.keyboard .key:nth-child(4):hover {
+  background-color: #e6b2a6; /* Slightly darker than #ffc1b3 */
+}
+
+.keyboard .key.large#submit-transaction:hover {
+  background-color: #333333; /* Slightly lighter black */
+}
+
+/* Modal */
 .modal {
   position: fixed;
   top: 0;
@@ -670,36 +350,15 @@ body.dark-mode .nav-button {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
   display: none;
   justify-content: center;
   align-items: center;
   overflow-y: auto;
-  z-index: 1000; /* Ensure the modal is above other content */
-}
-.modal-button {
-  background-color: #000;
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 20px;
-  font-size: 1rem;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 20px;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  text-align: center;
-}
-
-.modal-button:hover {
-  background-color: #333;
-}
-
-#currency-symbol {
-  margin-right: 10px;
+  z-index: 1000;
 }
 
 .modal-content {
-  background-color: #fff;
+  background-color: var(--modal-background-light);
   padding: 20px;
   border-radius: 10px;
   position: relative;
@@ -708,13 +367,24 @@ body.dark-mode .nav-button {
   opacity: 0;
   width: 100%;
   max-width: 500px;
-  z-index: 1000; /* Ensure the modal is above other content */
+  height: 600px;
+  z-index: 1000;
 }
+
+.amount-display {
+  font-size: 2.5rem; /* Zwiększenie wielkości wyświetlanej kwoty */
+  margin-bottom: 20px;
+}
+
 .modal.show .modal-content {
   transform: scale(1);
   opacity: 1;
 }
-/* Styl dla przycisku zamknięcia */
+
+.dark-mode .modal-content {
+  background-color: var(--modal-background-dark);
+}
+
 .close-btn {
   position: absolute;
   top: 20px;
@@ -730,13 +400,39 @@ body.dark-mode .nav-button {
   line-height: 1;
   transition: color 0.3s ease;
 }
-/* Ulepszenie przycisku zamknięcia na urządzeniach mobilnych */
+
 .close-btn:hover {
   color: #000;
 }
 
-/* portfel buttons */
+.dark-mode .close-btn {
+  color: #ffffff;
+}
 
+/* Przycisk modala */
+.modal-button {
+  background-color: var(--modal-button-light);
+  color: var(--text-light);
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  text-align: center;
+}
+
+.modal-button:hover {
+  background-color: #333;
+}
+
+.dark-mode .modal-button {
+  background-color: var(--modal-button-dark);
+  color: var(--text-dark);
+}
+
+/* Stylowanie sekcji portfela */
 .wallet-type-switch {
   display: flex;
   justify-content: center;
@@ -755,16 +451,32 @@ body.dark-mode .nav-button {
 }
 
 .wallet-button.active {
-  background-color: #000;
+  background-color: var(--wallet-button-active-light);
   color: #fff;
 }
 
-.wallet-button:hover {
-  background-color: #000000;
-  color: #fff;
+.dark-mode .wallet-button.active {
+  background-color: var(--wallet-button-active-dark);
+  color: var(--text-dark);
 }
 
-/* Nagłówki expenses / income */
+.dark-mode .wallet-button {
+  color: var(--text-dark);
+}
+
+#wallet-balance {
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--box-text-light);
+}
+
+#wallet-message {
+  font-size: 1.2rem;
+  font-weight: normal;
+  color: var(--box-text-light);
+}
+
+/* Stylowanie typu transakcji */
 .transaction-type-switch {
   display: flex;
   justify-content: center;
@@ -783,15 +495,41 @@ body.dark-mode .nav-button {
 }
 
 .transaction-type-switch button.active {
-  background-color: #000;
+  background-color: var(--transaction-type-active-light);
   color: #fff;
 }
 
+.dark-mode .transaction-type-switch button.active {
+  background-color: var(--transaction-type-active-dark);
+  color: var(--text-dark);
+}
+
+.dark-mode .transaction-type-switch button:not(.active) {
+  color: #777;
+}
+
 /* Wybór daty */
-.date-selector {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
+.date-selector input[type="date"] {
+  margin-top: 5px;
+  width: 100%;
+  padding: 5px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid var(--border-light);
+  background-color: var(--background-light);
+  color: var(--text-light);
+  display: none;
+}
+
+.date-display {
+  cursor: pointer;
+  padding: 5px;
+  border: 1px solid var(--border-light);
+  background-color: var(--background-light);
+  color: var(--text-light);
+  border-radius: 5px;
+  text-align: center;
+  font-size: 1rem;
 }
 
 .date-item {
@@ -800,24 +538,17 @@ body.dark-mode .nav-button {
   padding: 5px 10px;
   cursor: pointer;
   border-radius: 10px;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .date-item.selected {
-  background-color: #000;
-  color: #fff;
+  background-color: var(--date-item-selected-light);
+  color: var(--text-light);
 }
 
-/* Kwota */
-.amount-display {
-  font-size: 2.5rem;
-  margin: 20px 0;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: baseline;
-  color: #000;
-  text-align: center;
-  width: 100%;
+.dark-mode .date-item.selected {
+  background-color: var(--date-item-selected-dark);
+  color: var(--text-dark);
 }
 
 /* Wybór ikony i opis */
@@ -825,100 +556,50 @@ body.dark-mode .nav-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 20px 0;
+  margin-bottom: 10px;
 }
 
-.transaction-info select {
+.transaction-info img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+#transaction-icon {
   margin-right: 10px;
   padding: 5px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 
-.keyboard {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  width: 100%;
-  max-width: 400px;
-  margin: 0 auto;
+.dark-mode #transaction-icon {
+  background-color: #333;
+  color: #ffffff;
+  border: 1px solid #555;
 }
 
-.keyboard .key {
-  background-color: #f0f0f0;
-  padding: 15px 0;
-  border-radius: 10px;
+#transaction-description {
+  width: 50%;
+  padding: 5px;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  border: 1px solid #000000;
+  box-sizing: border-box;
+}
+
+.dark-mode #transaction-description {
+  background-color: #333;
+  color: #ffffff;
+  border: 1px solid #555;
+}
+
+/* Stylowanie dla strony wykresów */
+#chart-message {
   font-size: 1.2rem;
-  text-align: center;
-  cursor: pointer;
-  width: 100%;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.3s ease;
+  font-weight: normal;
+  color: var(--box-text-light);
 }
-
-.keyboard .key.large {
-  grid-column: span 2;
-  height: 60px;
-}
-
-.keyboard .key:last-child {
-  background-color: #000;
-  color: #fff;
-}
-/* Stylizacja klawiszy C, ←, i . */
-.keyboard .key:nth-child(4) {
-  /* Klawisz C */
-  background-color: #ffc1b3;
-  color: white;
-  font-weight: bold;
-  font-size: 1.5rem;
-}
-
-.keyboard .key:nth-child(8) {
-  /* Klawisz ← */
-  background-color: #fff3b3;
-  color: black;
-  font-weight: bold;
-  font-size: 1.5rem;
-}
-
-.keyboard .key:nth-child(12) {
-  /* Klawisz . */
-  background-color: #b3d9ff;
-  color: white;
-  font-weight: bold;
-  font-size: 1.5rem;
-}
-
-#chart-legend {
-  margin-top: 16px;
-  text-align: center;
-}
-
-#chart-legend div {
-  display: inline-flex;
-  align-items: center;
-  margin: 4px;
-}
-
-#chart-legend img {
-  vertical-align: middle;
-}
-
-body.dark-mode #chart-legend img {
-  filter: brightness(0) invert(1);
-}
-
-body.dark-mode #icon-preview {
-  filter: brightness(0) invert(1);
-}
-
-body.dark-mode #transaction-list .icon,
-body.dark-mode #wallet-transaction-list .icon {
-  filter: brightness(0) invert(1);
-}
-
 .chart-section {
   display: flex;
   flex-direction: column;
@@ -935,52 +616,89 @@ body.dark-mode #wallet-transaction-list .icon {
   margin: 0 auto;
 }
 
-#chart-legend {
-  margin-top: 16px;
-  text-align: center;
+.legend-icon img {
+  width: 30px;
+  height: 30px;
 }
 
-#chart-legend div {
+.dark-mode .legend-icon {
+  filter: brightness(0) invert(1);
+}
+
+.legend-details {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.legend-details span {
+  font-size: 0.9em;
+}
+
+.dark-mode .legend-item {
+  background-color: var(--box-background-dark); /* Kolor dla trybu ciemnego */
+  color: var(--text-dark);
+  border: 1px solid var(--border-dark);
+}
+
+.dark-mode .legend-item:hover {
+  background-color: #333; /* Zmiana koloru tła w trybie ciemnym podczas hover */
+}
+
+.legend-item.strike-through {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+#chart-legend {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping for items */
+  justify-content: center; /* Center items */
+  margin-top: 20px;
+  gap: 10px; /* Gap between legend items */
+}
+
+/* Legend item styles */
+.legend-item {
   display: flex;
   align-items: center;
-  margin: 4px auto;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%; /* Default full width on smaller screens */
+  max-width: 200px; /* Control maximum width */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-#chart-legend img {
-  vertical-align: middle;
+.legend-item:hover {
+  background-color: #eaeaea;
 }
 
-/* Media Query dla dużych ekranów */
+/* Media query for large screens (more than 1024px) */
 @media (min-width: 1024px) {
-  .chart-section {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 20px;
-    width: 100%;
-  }
-
-  .chart-section h3 {
-    width: 100%;
-    margin-bottom: 20px;
-    text-align: left;
-  }
-
-  .chart-container {
-    display: flex;
-    width: 100%;
-    align-items: center;
-  }
-
-  .chart-container canvas {
-    width: 65%;
-    margin-right: 20px;
-  }
-
   #chart-legend {
-    flex-grow: 1;
-    text-align: left;
-    align-self: flex-start;
+    justify-content: flex-start; /* Align items to the start */
+  }
+
+  .legend-item {
+    width: calc(33.33% - 10px); /* 3 items per row on large screens */
+  }
+}
+
+/* Media query for medium screens (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .legend-item {
+    width: calc(50% - 10px); /* 2 items per row on medium screens */
+  }
+}
+
+/* Media query for small screens (less than 768px) */
+@media (max-width: 768px) {
+  .legend-item {
+    width: calc(100% - 10px); /* 1 item per row on small screens */
   }
 }
 
@@ -1007,13 +725,6 @@ body.dark-mode #wallet-transaction-list .icon {
   }
 }
 
-#home-page .transaction-section {
-  flex-grow: 1;
-  overflow-y: auto;
-  margin-bottom: 60px;
-  padding-bottom: 20px;
-}
-
 /* Ogólne ustawienia dla każdej sekcji strony */
 .page {
   display: none;
@@ -1032,7 +743,7 @@ body.dark-mode #wallet-transaction-list .icon {
   padding-bottom: 60px;
 }
 
-/* Dodanie stylu do poprawienia przewijania w sekcji Portfel */
+#home-page .transaction-section,
 #wallet-page .transaction-section {
   flex-grow: 1;
   overflow-y: auto;
@@ -1040,9 +751,94 @@ body.dark-mode #wallet-transaction-list .icon {
   padding-bottom: 20px;
 }
 
-#wallet-transaction-list {
-  flex-grow: 1;
-  overflow-y: auto;
-  margin-bottom: 60px;
-  padding-bottom: 20px;
+/* Styl dla kwoty przychodów */
+.income-amount {
+  color: green;
+  font-weight: bold;
+}
+
+/* Styl dla kwoty wydatków */
+.expense-amount {
+  color: red;
+  font-weight: bold;
+}
+
+.transaction-date-header {
+  font-weight: bold;
+  margin: 15px 0 5px 0;
+  padding: 5px;
+  background-color: var(--transaction-background-light);
+  border-radius: 5px;
+}
+
+.dark-mode .transaction-date-header {
+  background-color: var(--transaction-background-dark);
+}
+
+.theme-toggle {
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+ion-icon {
+  font-size: 1.8rem;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  position: absolute;
+}
+
+#sunny {
+  color: var(--nav-button-light);
+  opacity: 1;
+}
+
+#moon {
+  color: var(--nav-button-dark);
+  opacity: 0;
+}
+
+.light-mode #sunny {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.light-mode #moon {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+.dark-mode #sunny {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.dark-mode #moon {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Kluczowe animacje */
+@keyframes rotateToDisappear {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+@keyframes appears {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
