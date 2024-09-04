@@ -683,7 +683,7 @@ body {
   }
 
   .legend-item {
-    width: calc(33.33% - 10px);
+    width: calc(50% - 10px);
   }
 }
 
