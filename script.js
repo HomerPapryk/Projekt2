@@ -796,6 +796,7 @@ themeToggle.addEventListener("click", () => {
   } else {
     enableDarkMode();
   }
+  updateChart();
 });
 
 function enableDarkMode() {
