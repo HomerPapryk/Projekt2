@@ -447,6 +447,16 @@ body {
   color: #fff;
 }
 
+.wallet-button:hover {
+  background-color: #000000;
+  color: #fff;
+}
+
+.dark-mode .wallet-button:hover {
+  background-color: var(--wallet-button-active-dark);
+  color: #fff;
+}
+
 .dark-mode .wallet-button.active {
   background-color: var(--wallet-button-active-dark);
   color: var(--text-dark);
@@ -825,5 +835,13 @@ ion-icon {
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  *:hover {
+    background-color: inherit; /* Usuń efekt hover */
+    color: inherit; /* Przywróć kolor do domyślnego */
+    cursor: default; /* Usuń efekt zmiany kursora */
   }
 }
