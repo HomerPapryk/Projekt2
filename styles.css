@@ -257,49 +257,12 @@ ion-icon {
   font-size: 1.8rem;
   transition: opacity 0.5s ease, transform 0.5s ease;
   position: absolute;
+  will-change: transform; /* Informacja dla przeglądarki o przyszłych animacjach */
 }
 
 #sunny,
 #moon {
-  display: none; /* Ukryj obie ikony na starcie */
-}
-
-.light-mode #sunny {
-  display: block; /* Pokaż słońce w trybie jasnym */
-}
-
-.dark-mode #moon {
-  display: block; /* Pokaż księżyc w trybie ciemnym */
-}
-
-#sunny {
-  color: var(--nav-button-light);
-  opacity: 1;
-}
-
-#moon {
-  stroke: none; /* Usuń ewentualny obrys */
-  overflow: hidden; /* Ukryj nadmiar */
-}
-
-.light-mode #sunny {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.light-mode #moon {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-
-.dark-mode #sunny {
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.dark-mode #moon {
-  opacity: 1;
-  transform: translateY(0);
+  display: none; /* Domyślnie ukryj obie ikony */
 }
 
 .theme-toggle:hover {
@@ -308,17 +271,11 @@ ion-icon {
 }
 
 .light-mode .theme-toggle:hover #sunny {
-  transform: scale(1.2);
-  transition: transform 0.3s ease-in-out;
   color: rgba(255, 223, 0, 1);
 }
 
 .dark-mode .theme-toggle:hover #moon {
   color: rgba(200, 200, 255, 0.7);
-}
-
-.dark-mode .theme-toggle #moon {
-  color: var(--nav-button-dark);
 }
 
 /* Stylowanie ikon */

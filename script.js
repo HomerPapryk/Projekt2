@@ -20,6 +20,7 @@ const transactionAmountDisplay = document.getElementById(
   "transaction-amount-display"
 );
 
+const app = document.querySelector(".app");
 const homeNavButton = document.getElementById("home-nav-button");
 const walletNavButton = document.getElementById("wallet-nav-button");
 const addTransactionButton = document.getElementById("add-transaction-button");
@@ -128,6 +129,7 @@ function showAddTransactionModal(isEdit) {
   transactionModal.style.display = "flex";
   setTimeout(() => {
     transactionModal.classList.add("show");
+    app.classList.add("blur");
   }, 10);
 }
 
@@ -135,6 +137,7 @@ function closeTransactionModal() {
   transactionModal.classList.remove("show");
   setTimeout(() => {
     transactionModal.style.display = "none";
+    app.classList.remove("blur");
   }, 300);
 }
 
