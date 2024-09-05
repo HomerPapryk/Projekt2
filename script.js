@@ -35,7 +35,6 @@ const transactionDescription = document.getElementById(
   "transaction-description"
 );
 const app = document.querySelector(".app");
-
 const editIndexInput = document.getElementById("edit-index");
 const dateSelector = document.getElementById("date-selector");
 
@@ -285,13 +284,11 @@ function filterTransactions(type) {
   sortedTransactions.forEach((transaction, index) => {
     const currentDate = transaction.date;
 
-    // Zaktualizowana linia formatowania daty
     const formattedDate = formatDateForDisplay(currentDate);
-
     if (currentDate !== lastDate) {
       const dateHeader = document.createElement("div");
       dateHeader.classList.add("transaction-date-header");
-      dateHeader.innerText = formattedDate; // Używamy sformatowanej daty
+      dateHeader.innerText = formattedDate;
       transactionList.appendChild(dateHeader);
       lastDate = currentDate;
     }
