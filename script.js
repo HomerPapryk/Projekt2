@@ -128,6 +128,7 @@ function showAddTransactionModal(isEdit) {
   transactionModal.style.display = "flex";
   setTimeout(() => {
     transactionModal.classList.add("show");
+    app.classList.add("blur");
   }, 10);
 }
 
@@ -135,6 +136,7 @@ function closeTransactionModal() {
   transactionModal.classList.remove("show");
   setTimeout(() => {
     transactionModal.style.display = "none";
+    app.classList.remove("blur");
   }, 300);
 }
 
@@ -793,6 +795,7 @@ themeToggle.addEventListener("click", () => {
   } else {
     enableDarkMode();
   }
+  updateChart();
 });
 
 function enableDarkMode() {

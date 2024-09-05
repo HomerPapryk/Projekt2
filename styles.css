@@ -257,13 +257,21 @@ ion-icon {
   font-size: 1.8rem;
   transition: opacity 0.5s ease, transform 0.5s ease;
   position: absolute;
-  will-change: transform; /* Informacja dla przeglądarki o przyszłych animacjach */
+  will-change: transform;
   color: var(--nav-button-light);
+}
+
+.dark-mode ion-icon {
+  font-size: 1.8rem;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  position: absolute;
+  will-change: transform;
+  color: var(--nav-button-dark);
 }
 
 #sunny,
 #moon {
-  display: none; /* Domyślnie ukryj obie ikony */
+  display: none;
 }
 
 .theme-toggle:hover {
@@ -277,6 +285,50 @@ ion-icon {
 
 .dark-mode .theme-toggle:hover #moon {
   color: rgba(200, 200, 255, 0.7);
+}
+
+/* Stylowanie ikon */
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
+.dark-mode .icon {
+  filter: brightness(0) invert(1);
+}
+
+/* Dodanie animacji */
+.light-mode .theme-toggle #sunny {
+  display: block;
+  animation: sunny-down 0.5s ease forwards;
+}
+
+.dark-mode .theme-toggle #moon {
+  display: block;
+  animation: moon-up 0.5s ease forwards;
+}
+
+/* Keyframes animacji */
+@keyframes sunny-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes moon-up {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Stylowanie ikon */
