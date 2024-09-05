@@ -34,6 +34,8 @@ const transactionIcon = document.getElementById("transaction-icon");
 const transactionDescription = document.getElementById(
   "transaction-description"
 );
+const app = document.querySelector(".app");
+
 const editIndexInput = document.getElementById("edit-index");
 const dateSelector = document.getElementById("date-selector");
 
