@@ -258,6 +258,7 @@ ion-icon {
   transition: opacity 0.5s ease, transform 0.5s ease;
   position: absolute;
   will-change: transform; /* Informacja dla przeglądarki o przyszłych animacjach */
+  color: var(--nav-button-light);
 }
 
 #sunny,
