@@ -782,10 +782,6 @@ ion-icon {
   }
 }
 
-/* Media query for medium screens (768px - 1024px) */
-@media (min-width: 768px) and (max-width: 1024px) {
-}
-
 /* Media query for small screens (less than 768px) */
 @media (max-width: 768px) {
   .legend-item {
@@ -890,8 +886,53 @@ ion-icon {
 
 @media (hover: none) and (pointer: coarse) {
   *:hover {
-    background-color: inherit; /* Usuń efekt hover */
-    color: inherit; /* Przywróć kolor do domyślnego */
-    cursor: default; /* Usuń efekt zmiany kursora */
+    cursor: default;
+  }
+  .theme-toggle #sunny,
+  .theme-toggle #moon {
+    animation: none !important;
+  }
+  ion-icon {
+    transition: none !important;
+  }
+
+  .theme-toggle:hover ion-icon {
+    color: var(--nav-button-light) !important;
+  }
+  .dark-mode .theme-toggle:hover ion-icon {
+    color: var(--nav-button-dark) !important;
+  }
+  @keyframes sunny-down {
+    0% {
+      opacity: 1;
+      transform: none;
+    }
+    100% {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes moon-up {
+    0% {
+      opacity: 1;
+      transform: none;
+    }
+    100% {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .nav-button,
+  .theme-toggle {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .nav-button.large {
+    transform: none !important;
   }
 }
