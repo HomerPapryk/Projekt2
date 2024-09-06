@@ -446,7 +446,7 @@ function updateChart() {
   const ctx = document.querySelector(".expense-chart").getContext("2d");
 
   if (chartInstance) {
-    chartInstance.destroy(); // Zniszcz istniejący wykres
+    chartInstance.destroy();
   }
 
   const groupedTransactions = transactions.reduce((acc, transaction) => {
@@ -474,7 +474,6 @@ function updateChart() {
   const totalIncome = incomeData.reduce((sum, t) => sum + t.amount, 0);
   const totalExpense = expenseData.reduce((sum, t) => sum + t.amount, 0);
 
-  // Obliczenie procentów wydatków
   let percentageUsed = 0;
   if (totalIncome > 0) {
     percentageUsed = ((totalExpense / totalIncome) * 100).toFixed(0);
@@ -518,7 +517,7 @@ function updateChart() {
           backgroundColor: allColors,
           borderColor: "#ffffff",
           borderWidth: 2,
-          cutout: "70%", // Wycięcie w środku na tekst
+          cutout: "70%",
         },
       ],
     },
@@ -526,7 +525,7 @@ function updateChart() {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { display: false }, // Ukrycie legendy, mamy własną
+        legend: { display: false },
         tooltip: {
           callbacks: {
             label: function (context) {
@@ -584,7 +583,7 @@ function updateChart() {
     percentageUsed: percentageUsed,
   });
 
-  createLegend(groupedTransactions, chartInstance); // Aktualizacja legendy
+  createLegend(groupedTransactions, chartInstance);
 }
 
 function createLegend(groupedTransactions, chart) {
