@@ -446,7 +446,7 @@ function updateChart() {
   const ctx = document.querySelector(".expense-chart").getContext("2d");
 
   if (chartInstance) {
-    chartInstance.destroy();
+    chartInstance.destroy(); // Zniszcz istniejący wykres, jeśli już istnieje
   }
 
   const groupedTransactions = transactions.reduce((acc, transaction) => {
@@ -474,6 +474,7 @@ function updateChart() {
   const totalIncome = incomeData.reduce((sum, t) => sum + t.amount, 0);
   const totalExpense = expenseData.reduce((sum, t) => sum + t.amount, 0);
 
+  // Obliczenie procentów wydatków
   let percentageUsed = 0;
   if (totalIncome > 0) {
     percentageUsed = ((totalExpense / totalIncome) * 100).toFixed(0);
@@ -517,7 +518,7 @@ function updateChart() {
           backgroundColor: allColors,
           borderColor: "#ffffff",
           borderWidth: 2,
-          cutout: "70%",
+          cutout: "70%", // Wycięcie w środku
         },
       ],
     },
@@ -525,7 +526,7 @@ function updateChart() {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { display: false },
+        legend: { display: false }, // Ukrycie legendy
         tooltip: {
           callbacks: {
             label: function (context) {
@@ -535,55 +536,20 @@ function updateChart() {
         },
       },
     },
-    plugins: [
-      {
-        id: "centerTextPlugin",
-        afterDraw: function (chart) {
-          const ctx = chart.ctx;
-          const width = chart.width;
-          const height = chart.height;
-          const centerX = width / 2;
-          const centerY = height / 2;
-
-          const totalIncome = chart.config.options.totalIncome || 0;
-          const totalExpense = chart.config.options.totalExpense || 0;
-          const percentageUsed = chart.config.options.percentageUsed || 0;
-
-          ctx.save();
-          ctx.textAlign = "center";
-          ctx.textBaseline = "middle";
-
-          // Procenty w środku
-          ctx.font = "bold 3em Segoe UI";
-          ctx.fillStyle = "#333333";
-          ctx.fillText(`${percentageUsed}%`, centerX, centerY - 10);
-
-          // Wyświetlanie wydatków
-          ctx.font = "1.4em Segoe UI";
-          ctx.fillStyle = "#FF4D4D";
-          ctx.fillText(`${totalExpense.toFixed(2)} PLN`, centerX, centerY + 30);
-
-          // Wyświetlanie przychodów
-          if (totalIncome > 0) {
-            ctx.font = "1.1em Segoe UI";
-            ctx.fillStyle = "#2e8b57";
-            ctx.fillText(
-              `${totalIncome.toFixed(2)} PLN`,
-              centerX,
-              centerY + 60
-            );
-          }
-
-          ctx.restore();
-        },
-      },
-    ],
-    totalIncome: totalIncome,
-    totalExpense: totalExpense,
-    percentageUsed: percentageUsed,
   });
 
-  createLegend(groupedTransactions, chartInstance);
+  // Aktualizacja wartości w nowym kontenerze HTML
+  document.querySelector(
+    ".percentage-display"
+  ).innerText = `${percentageUsed}%`;
+  document.querySelector(
+    ".expenses-display"
+  ).innerText = `${totalExpense.toFixed(2)} PLN`;
+  document.querySelector(".income-display").innerText = `${totalIncome.toFixed(
+    2
+  )} PLN`;
+
+  createLegend(groupedTransactions, chartInstance); // Aktualizacja legendy
 }
 
 function createLegend(groupedTransactions, chart) {

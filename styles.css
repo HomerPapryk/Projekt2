@@ -698,6 +698,38 @@ ion-icon {
 }
 
 /* Stylowanie dla strony wykresów */
+.chart-center {
+  position: absolute;
+  top: 50%; /* Pozycjonowanie w pionie na środku */
+  left: 50%; /* Pozycjonowanie w poziomie na środku */
+  transform: translate(
+    -50%,
+    -50%
+  ); /* Przesunięcie o połowę szerokości i wysokości, aby wycentrować */
+  text-align: center;
+  pointer-events: none; /* Aby ten element nie zakłócał nawigacji myszką po wykresie */
+  z-index: 10; /* Aby mieć pewność, że zawsze będzie wyświetlany nad wykresem */
+}
+
+.percentage-display {
+  font-size: 2.5em;
+  font-weight: bold;
+  color: #333;
+}
+
+.dark-mode .percentage-display {
+  color: var(--text-dark);
+}
+
+.expenses-display {
+  font-size: 1.4em;
+  color: #ff4d4d;
+}
+
+.income-display {
+  font-size: 1.1em;
+  color: #2e8b57;
+}
 .chart-message {
   font-size: 1.2rem;
   font-weight: normal;
@@ -714,9 +746,7 @@ ion-icon {
 }
 
 .chart-container {
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
+  position: relative; /* Potrzebujemy tego, aby elementy wewnętrzne były pozycjonowane względem wykresu */
 }
 
 .legend-icon img {
