@@ -296,20 +296,7 @@ function filterTransactions(type) {
     return dateB - dateA;
   });
 
-  let lastDate = null;
-
   sortedTransactions.forEach((transaction, index) => {
-    const currentDate = transaction.date;
-    const formattedDate = formatDateForDisplay(currentDate);
-
-    if (currentDate !== lastDate) {
-      const dateHeader = document.createElement("div");
-      dateHeader.classList.add("transaction-date-header");
-      dateHeader.innerText = formattedDate;
-      transactionList.appendChild(dateHeader);
-      lastDate = currentDate;
-    }
-
     const listItem = document.createElement("li");
     listItem.classList.add("transaction-item");
 
@@ -329,11 +316,11 @@ function filterTransactions(type) {
         <i class="fas fa-trash-alt" onclick="deleteTransaction(${index})"></i>
       </div>
     `;
+
     transactionList.appendChild(listItem);
   });
 
   updateBalance();
-  updateChart();
 }
 
 function editTransaction(index) {
@@ -349,15 +336,13 @@ function editTransaction(index) {
 }
 
 function deleteTransaction(index) {
-  transactions.splice(index, 1); // Usuwanie transakcji
-  saveTransactions(); // Zapisanie zmian w localStorage
+  transactions.splice(index, 1);
+  saveTransactions();
 
-  // Natychmiastowe odświeżenie wszystkich sekcji
-  updateBalance(); // Aktualizacja salda
-  updateUI(); // Odświeżenie transakcji na głównej stronie
-  updateChart(); // Aktualizacja wykresu
+  updateUI();
+  updateBalance();
+  updateChart();
 
-  // Odświeżenie transakcji w portfelu
   const activeFilter = document
     .querySelector(".wallet-button.active")
     .classList[1].replace("-button", "");
@@ -412,7 +397,6 @@ function addTransaction() {
   const description = transactionDescription.value.trim();
   const index = editIndexInput.value;
 
-  // Walidacja danych
   if (isNaN(amount) || amount <= 0) {
     alert("Proszę wprowadzić kwotę.");
     return;
@@ -423,7 +407,6 @@ function addTransaction() {
     return;
   }
 
-  // Określenie typu transakcji (przychód czy wydatek)
   const type = expenseButton.classList.contains("active")
     ? "expense"
     : "income";
@@ -441,20 +424,18 @@ function addTransaction() {
   };
 
   if (index) {
-    transactions[index] = transactionData; // Aktualizacja istniejącej transakcji
+    transactions[index] = transactionData;
   } else {
-    transactions.push(transactionData); // Dodanie nowej transakcji
+    transactions.push(transactionData);
   }
 
-  saveTransactions(); // Zapisanie transakcji w localStorage
-  closeTransactionModal(); // Zamknięcie modal
+  saveTransactions();
+  closeTransactionModal();
 
-  // Natychmiastowe odświeżenie wszystkich sekcji
-  updateBalance(); // Aktualizacja salda
-  updateUI(); // Odświeżenie transakcji na głównej stronie
-  updateChart(); // Aktualizacja wykresu
+  updateBalance();
+  updateUI();
+  updateChart();
 
-  // Odświeżenie transakcji w portfelu
   const activeFilter = document
     .querySelector(".wallet-button.active")
     .classList[1].replace("-button", "");
@@ -465,10 +446,9 @@ function updateChart() {
   const ctx = document.querySelector(".expense-chart").getContext("2d");
 
   if (chartInstance) {
-    chartInstance.destroy(); // Zniszcz istniejący wykres przed stworzeniem nowego
+    chartInstance.destroy(); // Zniszcz istniejący wykres
   }
 
-  // Grupowanie transakcji na podstawie kategorii
   const groupedTransactions = transactions.reduce((acc, transaction) => {
     const category = categoryNames[transaction.icon];
     if (!acc[category]) {
@@ -494,9 +474,11 @@ function updateChart() {
   const totalIncome = incomeData.reduce((sum, t) => sum + t.amount, 0);
   const totalExpense = expenseData.reduce((sum, t) => sum + t.amount, 0);
 
-  // Obliczanie procentów wydatków
-  const percentageUsed =
-    totalIncome > 0 ? ((totalExpense / totalIncome) * 100).toFixed(0) : 0; // Gdy brak przychodów, procent wynosi 0
+  // Obliczenie procentów wydatków
+  let percentageUsed = 0;
+  if (totalIncome > 0) {
+    percentageUsed = ((totalExpense / totalIncome) * 100).toFixed(0);
+  }
 
   const allCategories = [
     ...expenseData.map((t) => t.category),
@@ -507,7 +489,6 @@ function updateChart() {
     ...incomeData.map((t) => t.amount),
   ];
 
-  // Kolory wykresu
   const colors = {
     Jedzenie: "#FF6666",
     Zakupy: "#FF9999",
@@ -537,16 +518,15 @@ function updateChart() {
           backgroundColor: allColors,
           borderColor: "#ffffff",
           borderWidth: 2,
-          cutout: "70%",
+          cutout: "70%", // Wycięcie w środku na tekst
         },
       ],
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      animation: { duration: 2000, easing: "easeOutBounce" },
       plugins: {
-        legend: { display: false },
+        legend: { display: false }, // Ukrycie legendy, mamy własną
         tooltip: {
           callbacks: {
             label: function (context) {
@@ -556,52 +536,55 @@ function updateChart() {
         },
       },
     },
-    incomeData: incomeData,
-    expenseData: expenseData,
+    plugins: [
+      {
+        id: "centerTextPlugin",
+        afterDraw: function (chart) {
+          const ctx = chart.ctx;
+          const width = chart.width;
+          const height = chart.height;
+          const centerX = width / 2;
+          const centerY = height / 2;
+
+          const totalIncome = chart.config.options.totalIncome || 0;
+          const totalExpense = chart.config.options.totalExpense || 0;
+          const percentageUsed = chart.config.options.percentageUsed || 0;
+
+          ctx.save();
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+
+          // Procenty w środku
+          ctx.font = "bold 3em Segoe UI";
+          ctx.fillStyle = "#333333";
+          ctx.fillText(`${percentageUsed}%`, centerX, centerY - 10);
+
+          // Wyświetlanie wydatków
+          ctx.font = "1.4em Segoe UI";
+          ctx.fillStyle = "#FF4D4D";
+          ctx.fillText(`${totalExpense.toFixed(2)} PLN`, centerX, centerY + 30);
+
+          // Wyświetlanie przychodów
+          if (totalIncome > 0) {
+            ctx.font = "1.1em Segoe UI";
+            ctx.fillStyle = "#2e8b57";
+            ctx.fillText(
+              `${totalIncome.toFixed(2)} PLN`,
+              centerX,
+              centerY + 60
+            );
+          }
+
+          ctx.restore();
+        },
+      },
+    ],
+    totalIncome: totalIncome,
+    totalExpense: totalExpense,
+    percentageUsed: percentageUsed,
   });
 
-  // Dodanie tekstu w środku wykresu (procenty, wydatki, przychody)
-  Chart.register({
-    id: "centerTextPlugin",
-    beforeDraw: function (chart) {
-      const ctx = chart.ctx;
-      const width = chart.width;
-      const height = chart.height;
-
-      const percentageColor = document.body.classList.contains("dark-mode")
-        ? "#ffffff"
-        : "#333333";
-
-      const centerX = width / 2;
-      const centerY = height / 2;
-
-      ctx.save();
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.clearRect(0, 0, width, height);
-
-      // Wyświetlanie procentu wykorzystania
-      ctx.font = "bold 3em Segoe UI";
-      ctx.fillStyle = percentageColor;
-      ctx.fillText(`${percentageUsed}%`, centerX, centerY - 10);
-
-      // Wyświetlanie wydatków (czerwony tekst)
-      ctx.font = "1.4em Segoe UI";
-      ctx.fillStyle = "#FF4D4D";
-      ctx.fillText(`${totalExpense.toFixed(2)} PLN`, centerX, centerY + 30);
-
-      // Wyświetlanie przychodów (zielony tekst)
-      if (totalIncome > 0) {
-        ctx.font = "1.1em Segoe UI";
-        ctx.fillStyle = "#2e8b57";
-        ctx.fillText(`${totalIncome.toFixed(2)} PLN`, centerX, centerY + 60);
-      }
-
-      ctx.restore();
-    },
-  });
-
-  createLegend(groupedTransactions, chartInstance); // Tworzenie legendy
+  createLegend(groupedTransactions, chartInstance); // Aktualizacja legendy
 }
 
 function createLegend(groupedTransactions, chart) {
