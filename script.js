@@ -119,6 +119,8 @@ function navigateTo(section) {
   if (section === "chart") {
     updateChart();
   }
+
+  updateBalance();
 }
 
 function showAddTransactionModal(isEdit) {
@@ -246,10 +248,8 @@ function updateUI() {
     if (currentDate !== lastDate) {
       const dateHeader = document.createElement("div");
       dateHeader.classList.add("transaction-date-header");
-
       const formattedDate = formatDateForDisplay(currentDate);
       dateHeader.innerText = formattedDate;
-
       transactionList.appendChild(dateHeader);
       lastDate = currentDate;
     }
@@ -273,11 +273,12 @@ function updateUI() {
         <i class="fas fa-trash-alt" onclick="deleteTransaction(${index})"></i>
       </div>
     `;
+
     transactionList.appendChild(listItem);
   });
 
-  updateChart();
   updateBalance();
+  updateChart();
 }
 
 function filterTransactions(type) {
@@ -299,8 +300,8 @@ function filterTransactions(type) {
 
   sortedTransactions.forEach((transaction, index) => {
     const currentDate = transaction.date;
-
     const formattedDate = formatDateForDisplay(currentDate);
+
     if (currentDate !== lastDate) {
       const dateHeader = document.createElement("div");
       dateHeader.classList.add("transaction-date-header");
@@ -332,6 +333,7 @@ function filterTransactions(type) {
   });
 
   updateBalance();
+  updateChart();
 }
 
 function editTransaction(index) {
@@ -347,10 +349,15 @@ function editTransaction(index) {
 }
 
 function deleteTransaction(index) {
-  transactions.splice(index, 1);
-  updateUI();
-  saveTransactions();
+  transactions.splice(index, 1); // Usuwanie transakcji
+  saveTransactions(); // Zapisanie zmian w localStorage
 
+  // Natychmiastowe odświeżenie wszystkich sekcji
+  updateBalance(); // Aktualizacja salda
+  updateUI(); // Odświeżenie transakcji na głównej stronie
+  updateChart(); // Aktualizacja wykresu
+
+  // Odświeżenie transakcji w portfelu
   const activeFilter = document
     .querySelector(".wallet-button.active")
     .classList[1].replace("-button", "");
@@ -405,6 +412,7 @@ function addTransaction() {
   const description = transactionDescription.value.trim();
   const index = editIndexInput.value;
 
+  // Walidacja danych
   if (isNaN(amount) || amount <= 0) {
     alert("Proszę wprowadzić kwotę.");
     return;
@@ -415,6 +423,7 @@ function addTransaction() {
     return;
   }
 
+  // Określenie typu transakcji (przychód czy wydatek)
   const type = expenseButton.classList.contains("active")
     ? "expense"
     : "income";
@@ -432,29 +441,34 @@ function addTransaction() {
   };
 
   if (index) {
-    transactions[index] = transactionData;
+    transactions[index] = transactionData; // Aktualizacja istniejącej transakcji
   } else {
-    transactions.push(transactionData);
+    transactions.push(transactionData); // Dodanie nowej transakcji
   }
 
-  updateUI();
-  saveTransactions();
-  closeTransactionModal();
+  saveTransactions(); // Zapisanie transakcji w localStorage
+  closeTransactionModal(); // Zamknięcie modal
 
+  // Natychmiastowe odświeżenie wszystkich sekcji
+  updateBalance(); // Aktualizacja salda
+  updateUI(); // Odświeżenie transakcji na głównej stronie
+  updateChart(); // Aktualizacja wykresu
+
+  // Odświeżenie transakcji w portfelu
   const activeFilter = document
     .querySelector(".wallet-button.active")
     .classList[1].replace("-button", "");
   filterTransactions(activeFilter);
-  updateChart();
 }
 
 function updateChart() {
   const ctx = document.querySelector(".expense-chart").getContext("2d");
 
   if (chartInstance) {
-    chartInstance.destroy();
+    chartInstance.destroy(); // Zniszcz istniejący wykres przed stworzeniem nowego
   }
 
+  // Grupowanie transakcji na podstawie kategorii
   const groupedTransactions = transactions.reduce((acc, transaction) => {
     const category = categoryNames[transaction.icon];
     if (!acc[category]) {
@@ -480,9 +494,9 @@ function updateChart() {
   const totalIncome = incomeData.reduce((sum, t) => sum + t.amount, 0);
   const totalExpense = expenseData.reduce((sum, t) => sum + t.amount, 0);
 
-  const percentageUsed = totalIncome
-    ? ((totalExpense / totalIncome) * 100).toFixed(0)
-    : 0;
+  // Obliczanie procentów wydatków
+  const percentageUsed =
+    totalIncome > 0 ? ((totalExpense / totalIncome) * 100).toFixed(0) : 0; // Gdy brak przychodów, procent wynosi 0
 
   const allCategories = [
     ...expenseData.map((t) => t.category),
@@ -493,6 +507,7 @@ function updateChart() {
     ...incomeData.map((t) => t.amount),
   ];
 
+  // Kolory wykresu
   const colors = {
     Jedzenie: "#FF6666",
     Zakupy: "#FF9999",
@@ -535,7 +550,7 @@ function updateChart() {
         tooltip: {
           callbacks: {
             label: function (context) {
-              return `${context.label}: ${context.raw} PLN`;
+              return `${context.label}: ${context.raw.toFixed(2)} PLN`;
             },
           },
         },
@@ -565,26 +580,28 @@ function updateChart() {
       ctx.textBaseline = "middle";
       ctx.clearRect(0, 0, width, height);
 
-      // Wyświetlanie procentów
+      // Wyświetlanie procentu wykorzystania
       ctx.font = "bold 3em Segoe UI";
       ctx.fillStyle = percentageColor;
-      ctx.fillText(percentageUsed + "%", centerX, centerY - 10);
+      ctx.fillText(`${percentageUsed}%`, centerX, centerY - 10);
 
-      // Wyświetlanie wydatków
+      // Wyświetlanie wydatków (czerwony tekst)
       ctx.font = "1.4em Segoe UI";
       ctx.fillStyle = "#FF4D4D";
-      ctx.fillText(totalExpense.toFixed(2) + " PLN", centerX, centerY + 30);
+      ctx.fillText(`${totalExpense.toFixed(2)} PLN`, centerX, centerY + 30);
 
-      // Wyświetlanie przychodów
-      ctx.font = "1.1em Segoe UI";
-      ctx.fillStyle = "#2e8b57";
-      ctx.fillText(totalIncome.toFixed(2) + " PLN", centerX, centerY + 60);
+      // Wyświetlanie przychodów (zielony tekst)
+      if (totalIncome > 0) {
+        ctx.font = "1.1em Segoe UI";
+        ctx.fillStyle = "#2e8b57";
+        ctx.fillText(`${totalIncome.toFixed(2)} PLN`, centerX, centerY + 60);
+      }
 
       ctx.restore();
     },
   });
 
-  createLegend(groupedTransactions, chartInstance);
+  createLegend(groupedTransactions, chartInstance); // Tworzenie legendy
 }
 
 function createLegend(groupedTransactions, chart) {
@@ -595,6 +612,10 @@ function createLegend(groupedTransactions, chart) {
     const categoryIconPath = Object.keys(categoryNames).find(
       (key) => categoryNames[key] === transaction.category
     );
+
+    if (transaction.amount === 0) {
+      return;
+    }
 
     const legendItem = document.createElement("div");
     legendItem.classList.add("legend-item");
