@@ -51,6 +51,11 @@ body {
   transition: background-color 400ms ease;
 }
 
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
 .dark-mode {
   background-color: var(--background-dark);
   color: var(--text-dark);
@@ -127,13 +132,13 @@ body {
   margin: 20px 0;
 }
 
-#total-balance {
+.total-balance {
   font-size: 3rem;
   font-weight: bold;
   color: var(--box-text-light);
 }
 
-#balance-message {
+.balance-message {
   font-size: 1.2rem;
   font-weight: normal;
   color: var(--box-text-light);
@@ -269,8 +274,8 @@ ion-icon {
   color: var(--nav-button-dark);
 }
 
-#sunny,
-#moon {
+.sunny,
+.moon {
   display: none;
 }
 
@@ -279,11 +284,11 @@ ion-icon {
   transition: transform 0.3s ease-in-out;
 }
 
-.light-mode .theme-toggle:hover #sunny {
+.light-mode .theme-toggle:hover .sunny {
   color: rgba(255, 223, 0, 1);
 }
 
-.dark-mode .theme-toggle:hover #moon {
+.dark-mode .theme-toggle:hover .moon {
   color: rgba(200, 200, 255, 0.7);
 }
 
@@ -298,12 +303,12 @@ ion-icon {
 }
 
 /* Dodanie animacji */
-.light-mode .theme-toggle #sunny {
+.light-mode .theme-toggle .sunny {
   display: block;
   animation: sunny-down 0.5s ease forwards;
 }
 
-.dark-mode .theme-toggle #moon {
+.dark-mode .theme-toggle .moon {
   display: block;
   animation: moon-up 0.5s ease forwards;
 }
@@ -426,7 +431,7 @@ ion-icon {
   background-color: #e6b2a6;
 }
 
-.keyboard .key.large#submit-transaction:hover {
+.keyboard .key.large.submit-transaction:hover {
   background-color: #333333;
 }
 
@@ -562,13 +567,13 @@ ion-icon {
   color: var(--text-dark);
 }
 
-#wallet-balance {
+.wallet-balance {
   font-size: 3rem;
   font-weight: bold;
   color: var(--box-text-light);
 }
 
-#wallet-message {
+.wallet-message {
   font-size: 1.2rem;
   font-weight: normal;
   color: var(--box-text-light);
@@ -663,7 +668,7 @@ ion-icon {
   margin-right: 10px;
 }
 
-#transaction-icon {
+.transaction-icon {
   margin-right: 10px;
   padding: 5px;
   background-color: #ffffff;
@@ -671,13 +676,13 @@ ion-icon {
   border-radius: 5px;
 }
 
-.dark-mode #transaction-icon {
+.dark-mode .transaction-icon {
   background-color: #333;
   color: #ffffff;
   border: 1px solid #555;
 }
 
-#transaction-description {
+.transaction-description {
   width: 50%;
   padding: 5px;
   font-size: 0.9rem;
@@ -686,14 +691,14 @@ ion-icon {
   box-sizing: border-box;
 }
 
-.dark-mode #transaction-description {
+.dark-mode .transaction-description {
   background-color: #333;
   color: #ffffff;
   border: 1px solid #555;
 }
 
 /* Stylowanie dla strony wykresów */
-#chart-message {
+.chart-message {
   font-size: 1.2rem;
   font-weight: normal;
   color: var(--box-text-light);
@@ -747,7 +752,7 @@ ion-icon {
   text-decoration: line-through;
   opacity: 0.5;
 }
-#chart-legend {
+.chart-legend {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -777,7 +782,7 @@ ion-icon {
 
 /* Media query for large screens (more than 1024px) */
 @media (min-width: 1024px) {
-  #chart-legend {
+  .chart-legend {
     justify-content: flex-start;
   }
 }
@@ -830,8 +835,8 @@ ion-icon {
   padding-bottom: 60px;
 }
 
-#home-page .transaction-section,
-#wallet-page .transaction-section {
+.home-page .transaction-section,
+.wallet-page .transaction-section {
   flex-grow: 1;
   overflow-y: auto;
   margin-bottom: 60px;
@@ -888,8 +893,8 @@ ion-icon {
   *:hover {
     cursor: default;
   }
-  .theme-toggle #sunny,
-  .theme-toggle #moon {
+  .theme-toggle .sunny,
+  .theme-toggle .moon {
     animation: none !important;
   }
   ion-icon {

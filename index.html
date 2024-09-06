@@ -12,7 +12,7 @@
   </head>
   <body>
     <div class="app">
-      <div id="home-page" class="page active">
+      <div class="home-page page active">
         <header class="app-header">
           <div class="header-center">
             <h1>Dashboard</h1>
@@ -28,16 +28,16 @@
         <main>
           <section class="balance-section">
             <div class="balance-box">
-              <span id="total-balance">0 PLN</span>
-              <p id="balance-message">Możesz jeszcze wydać 0 złotych</p>
+              <span class="total-balance">0 PLN</span>
+              <p class="balance-message">Możesz jeszcze wydać 0 złotych</p>
             </div>
           </section>
           <section class="transaction-section">
-            <ul id="transaction-list" class="transaction-list"></ul>
+            <ul class="transaction-list"></ul>
           </section>
         </main>
       </div>
-      <div id="wallet-page" class="page">
+      <div class="wallet-page page">
         <header class="app-header">
           <div class="header-center">
             <h1>Portfel</h1>
@@ -53,20 +53,20 @@
         <main>
           <section class="balance-section">
             <div class="balance-box">
-              <span id="wallet-balance">0 PLN</span>
-              <p id="wallet-message">Wybierz kategorię</p>
+              <span class="wallet-balance">0 PLN</span>
+              <p class="wallet-message">Wybierz kategorię</p>
             </div>
           </section>
           <div class="wallet-type-switch">
-            <button class="wallet-button active" id="expense-button">Wydatki</button>
-            <button class="wallet-button" id="income-button">Przychód</button>
-            <button class="wallet-button" id="all-button">Zobacz wszystkie</button>
+            <button class="wallet-button active expense-button">Wydatki</button>
+            <button class="wallet-button income-button">Przychód</button>
+            <button class="wallet-button all-button">Zobacz wszystkie</button>
           </div>
 
-          <ul id="wallet-transaction-list" class="transaction-list"></ul>
+          <ul class="wallet-transaction-list transaction-list"></ul>
         </main>
       </div>
-      <div id="chart-page" class="page">
+      <div class="chart-page page">
         <header class="app-header">
           <div class="header-center">
             <h1>Wykresy</h1>
@@ -78,59 +78,59 @@
         <main>
           <section class="balance-section">
             <div class="balance-box">
-              <span id="chart-balance">0 PLN</span>
-              <p id="chart-message">Pozostałe środki</p>
+              <span class="chart-balance">0 PLN</span>
+              <p class="chart-message">Pozostałe środki</p>
             </div>
           </section>
           <section class="chart-section">
             <h2>Wykres wydatków i przychodów</h2>
             <div class="chart-container">
-              <canvas id="expense-chart"></canvas>
+              <canvas class="expense-chart"></canvas>
             </div>
-            <div id="chart-legend"></div> 
+            <div class="chart-legend"></div> 
           </section>
         </main>
-    </div>
+      </div>
 
       <footer class="app-footer">
         <nav class="footer-nav">
-          <button class="nav-button" id="home-nav-button">
+          <button class="nav-button home-nav-button">
             <i class="fas fa-home"></i>
           </button>
-          <button class="nav-button" id="wallet-nav-button">
+          <button class="nav-button wallet-nav-button">
             <i class="fas fa-wallet"></i>
           </button>
-          <button class="nav-button large" id="add-transaction-button">
+          <button class="nav-button large add-transaction-button">
             <i class="fas fa-plus"></i>
           </button>
-          <button class="nav-button" id="chart-nav-button">
+          <button class="nav-button chart-nav-button">
             <i class="fas fa-chart-pie"></i>
           </button>
           <button class="theme-toggle">
-            <ion-icon id="sunny" name="sunny"></ion-icon>
-            <ion-icon id="moon" name="moon"></ion-icon>
+            <ion-icon class="sunny" name="sunny"></ion-icon>
+            <ion-icon class="moon" name="moon"></ion-icon>
           </button>
         </nav>
       </footer>
 
-      <div id="transaction-modal" class="modal">
+      <div class="transaction-modal modal">
         <div class="modal-content">
-          <span class="close-btn" id="close-transaction-modal">&times;</span>
-          <form id="transaction-form">
+          <span class="close-btn close-transaction-modal">&times;</span>
+          <form class="transaction-form">
             <div class="transaction-type-switch">
-              <button type="button" id="modal-expenses-button" class="active">Expenses</button>
-              <button type="button" id="modal-income-button">Income</button>
+              <button type="button" class="modal-expenses-button active">Wydatki</button>
+              <button type="button" class="modal-income-button">Przychody</button>
             </div>
-            <div class="date-selector" id="date-selector"></div>
-            <input type="hidden" id="edit-index" value="">
+            <div class="date-selector"></div>
+            <input type="hidden" class="edit-index" value="">
             <div class="amount-display">
-              <span id="currency-symbol">PLN</span>
-              <span id="transaction-amount-display">0.00</span>
+              <span class="currency-symbol">PLN</span>
+              <span class="transaction-amount-display">0.00</span>
             </div>
             <div class="transaction-info">
-              <img id="icon-preview" src="Iconsexpenses/Food.svg" alt="Ikona" style="width:30px; height:30px; vertical-align:middle;">
-              <select id="transaction-icon"></select>
-              <input type="text" id="transaction-description" placeholder="Opis" required/>
+              <img class="icon-preview" src="Iconsexpenses/Food.svg" alt="Ikona" style="width:30px; height:30px; vertical-align:middle;">
+              <select class="transaction-icon"></select>
+              <input type="text" class="transaction-description" placeholder="Opis" required/>
             </div>
             <div class="keyboard">
               <div class="key">1</div>
@@ -146,7 +146,7 @@
               <div class="key">9</div>
               <div class="key">.</div>
               <div class="key large">0</div>
-              <div class="key large" id="submit-transaction">&#10004;</div>
+              <div class="key large submit-transaction">&#10004;</div>
             </div>
           </form>
         </div>

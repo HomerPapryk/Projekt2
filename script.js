@@ -1,42 +1,42 @@
 const categoryNames = {
-  "Iconsexpenses/Food.svg": "Food",
-  "Iconsexpenses/Shopping.svg": "Shopping",
-  "Iconsexpenses/Car.svg": "Car",
-  "Iconsexpenses/Rent.svg": "Rent",
-  "Iconsexpenses/Health.svg": "Health",
-  "Iconsexpenses/Education.svg": "Education",
-  "Iconsexpenses/Entertainment.svg": "Entertainment",
-  "Iconsexpenses/Fuel.svg": "Fuel",
-  "Iconsexpenses/Bills.svg": "Bills",
-  "Iconsincome/Salary.svg": "Salary",
-  "Iconsincome/Bonus.svg": "Bonus",
-  "Iconsincome/SavingsAccount.svg": "Savings Account",
-  "Iconsincome/Investment.svg": "Investment",
-  "Iconsincome/Inheritance.svg": "Inheritance",
+  "Iconsexpenses/Food.svg": "Jedzenie",
+  "Iconsexpenses/Shopping.svg": "Zakupy",
+  "Iconsexpenses/Car.svg": "Samochód",
+  "Iconsexpenses/Rent.svg": "Czynsz",
+  "Iconsexpenses/Health.svg": "Zdrowie",
+  "Iconsexpenses/Education.svg": "Edukacja",
+  "Iconsexpenses/Entertainment.svg": "Rozrywka",
+  "Iconsexpenses/Fuel.svg": "Paliwo",
+  "Iconsexpenses/Bills.svg": "Rachunki",
+  "Iconsincome/Salary.svg": "Wynagrodzenie",
+  "Iconsincome/Bonus.svg": "Premia",
+  "Iconsincome/SavingsAccount.svg": "Konto Oszczędnościowe",
+  "Iconsincome/Investment.svg": "Inwestycja",
+  "Iconsincome/Inheritance.svg": "Spadek",
 };
 
-const transactionModal = document.getElementById("transaction-modal");
-const transactionAmountDisplay = document.getElementById(
-  "transaction-amount-display"
+const transactionModal = document.querySelector(".transaction-modal");
+const transactionAmountDisplay = document.querySelector(
+  ".transaction-amount-display"
 );
 
-const homeNavButton = document.getElementById("home-nav-button");
-const walletNavButton = document.getElementById("wallet-nav-button");
-const addTransactionButton = document.getElementById("add-transaction-button");
-const chartNavButton = document.getElementById("chart-nav-button");
-const closeTransactionModalButton = document.getElementById(
-  "close-transaction-modal"
+const homeNavButton = document.querySelector(".home-nav-button");
+const walletNavButton = document.querySelector(".wallet-nav-button");
+const addTransactionButton = document.querySelector(".add-transaction-button");
+const chartNavButton = document.querySelector(".chart-nav-button");
+const closeTransactionModalButton = document.querySelector(
+  ".close-transaction-modal"
 );
-const transactionForm = document.getElementById("transaction-form");
-const expenseButton = document.getElementById("modal-expenses-button");
-const incomeButton = document.getElementById("modal-income-button");
-const transactionIcon = document.getElementById("transaction-icon");
-const transactionDescription = document.getElementById(
-  "transaction-description"
+const transactionForm = document.querySelector(".transaction-form");
+const expenseButton = document.querySelector(".modal-expenses-button");
+const incomeButton = document.querySelector(".modal-income-button");
+const transactionIcon = document.querySelector(".transaction-icon");
+const transactionDescription = document.querySelector(
+  ".transaction-description"
 );
 const app = document.querySelector(".app");
-const editIndexInput = document.getElementById("edit-index");
-const dateSelector = document.getElementById("date-selector");
+const editIndexInput = document.querySelector(".edit-index");
+const dateSelector = document.querySelector(".date-selector");
 
 let transactions = [];
 let chartInstance = null;
@@ -64,7 +64,6 @@ transactionIcon.addEventListener("change", updateIconPreview);
 
 function generateDates() {
   const today = new Date();
-  const dateSelector = document.getElementById("date-selector");
 
   const options = { year: "numeric", month: "2-digit", day: "2-digit" };
   const formattedDate = today.toLocaleDateString("pl-PL", options);
@@ -108,12 +107,12 @@ function navigateTo(section) {
     page.classList.remove("active");
   });
 
-  document.getElementById(section + "-page").classList.add("active");
+  document.querySelector(`.${section}-page`).classList.add("active");
 
   if (section === "wallet") {
     const activeFilter = document
       .querySelector(".wallet-button.active")
-      .id.replace("-button", "");
+      .classList[1].replace("-button", "");
     filterTransactions(activeFilter);
   }
 
@@ -160,22 +159,22 @@ function toggleTransactionType(type) {
 function updateIconOptions(type = "expenses") {
   const icons = {
     expenses: [
-      { name: "Food", path: "Iconsexpenses/Food.svg" },
-      { name: "Shopping", path: "Iconsexpenses/Shopping.svg" },
-      { name: "Car", path: "Iconsexpenses/Car.svg" },
-      { name: "Rent", path: "Iconsexpenses/Rent.svg" },
-      { name: "Health", path: "Iconsexpenses/Health.svg" },
-      { name: "Education", path: "Iconsexpenses/Education.svg" },
-      { name: "Entertainment", path: "Iconsexpenses/Entertainment.svg" },
-      { name: "Fuel", path: "Iconsexpenses/Fuel.svg" },
-      { name: "Bills", path: "Iconsexpenses/Bills.svg" },
+      { name: "Jedzenie", path: "Iconsexpenses/Food.svg" },
+      { name: "Zakupy", path: "Iconsexpenses/Shopping.svg" },
+      { name: "Samochód", path: "Iconsexpenses/Car.svg" },
+      { name: "Czynsz", path: "Iconsexpenses/Rent.svg" },
+      { name: "Zdrowie", path: "Iconsexpenses/Health.svg" },
+      { name: "Edukacja", path: "Iconsexpenses/Education.svg" },
+      { name: "Rozrywka", path: "Iconsexpenses/Entertainment.svg" },
+      { name: "Paliwo", path: "Iconsexpenses/Fuel.svg" },
+      { name: "Rachunki", path: "Iconsexpenses/Bills.svg" },
     ],
     income: [
-      { name: "Salary", path: "Iconsincome/Salary.svg" },
-      { name: "Bonus", path: "Iconsincome/Bonus.svg" },
-      { name: "Savings Account", path: "Iconsincome/SavingsAccount.svg" },
-      { name: "Investment", path: "Iconsincome/Investment.svg" },
-      { name: "Inheritance", path: "Iconsincome/Inheritance.svg" },
+      { name: "Wynagrodzenie", path: "Iconsincome/Salary.svg" },
+      { name: "Premia", path: "Iconsincome/Bonus.svg" },
+      { name: "Konto Oszczędnościowe", path: "Iconsincome/SavingsAccount.svg" },
+      { name: "Inwestycja", path: "Iconsincome/Investment.svg" },
+      { name: "Spadek", path: "Iconsincome/Inheritance.svg" },
     ],
   };
 
@@ -192,11 +191,28 @@ function updateIconOptions(type = "expenses") {
 }
 
 function updateIconPreview() {
-  document.getElementById("icon-preview").src = transactionIcon.value;
+  document.querySelector(".icon-preview").src = transactionIcon.value;
 }
 
 function handleTransactionSubmit(event) {
   event.preventDefault();
+
+  const amount = parseFloat(transactionAmountDisplay.innerText);
+  const description = transactionDescription.value.trim();
+  const type = expenseButton.classList.contains("active")
+    ? "expense"
+    : "income";
+
+  if (isNaN(amount) || amount <= 0) {
+    alert("Proszę wprowadzić poprawną kwotę.");
+    return;
+  }
+
+  if (!description) {
+    alert("Proszę wprowadzić opis.");
+    return;
+  }
+
   addTransaction();
 }
 
@@ -213,7 +229,7 @@ function loadTransactions() {
 }
 
 function updateUI() {
-  const transactionList = document.getElementById("transaction-list");
+  const transactionList = document.querySelector(".transaction-list");
   transactionList.innerHTML = "";
 
   const sortedTransactions = transactions.sort((a, b) => {
@@ -265,7 +281,7 @@ function updateUI() {
 }
 
 function filterTransactions(type) {
-  const transactionList = document.getElementById("wallet-transaction-list");
+  const transactionList = document.querySelector(".wallet-transaction-list");
   transactionList.innerHTML = "";
 
   const filteredTransactions =
@@ -337,7 +353,7 @@ function deleteTransaction(index) {
 
   const activeFilter = document
     .querySelector(".wallet-button.active")
-    .id.replace("-button", "");
+    .classList[1].replace("-button", "");
   filterTransactions(activeFilter);
 }
 
@@ -350,13 +366,13 @@ function updateBalance() {
     .reduce((sum, t) => sum + parseFloat(t.amount), 0);
   const balance = totalIncome - totalExpense;
 
-  document.getElementById("total-balance").innerText = `${balance.toFixed(
+  document.querySelector(".total-balance").innerText = `${balance.toFixed(
     2
   )} PLN`;
-  document.getElementById("wallet-balance").innerText = `${balance.toFixed(
+  document.querySelector(".wallet-balance").innerText = `${balance.toFixed(
     2
   )} PLN`;
-  document.getElementById("chart-balance").innerText = `${balance.toFixed(
+  document.querySelector(".chart-balance").innerText = `${balance.toFixed(
     2
   )} PLN`;
 
@@ -370,107 +386,70 @@ function updateBalance() {
       balance
     ).toFixed(2)} złotych`;
   }
-  document.getElementById("balance-message").innerText = balanceMessage;
+  document.querySelector(".balance-message").innerText = balanceMessage;
 }
 
-Chart.register({
-  id: "centerTextPlugin",
-  beforeDraw: function (chart) {
-    const ctx = chart.ctx;
-    const width = chart.width;
-    const height = chart.height;
+function formatDateForDisplay(isoDate) {
+  const date = new Date(isoDate);
+  const options = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    weekday: "long",
+  };
+  return date.toLocaleDateString("pl-PL", options);
+}
 
-    const totalIncome = chart.config._config.incomeData.reduce(
-      (sum, t) => sum + t.amount,
-      0
-    );
-    const totalExpense = chart.config._config.expenseData.reduce(
-      (sum, t) => sum + t.amount,
-      0
-    );
+function addTransaction() {
+  const amount = parseFloat(transactionAmountDisplay.innerText);
+  const description = transactionDescription.value.trim();
+  const index = editIndexInput.value;
 
-    const percentageUsed = totalIncome
-      ? ((totalExpense / totalIncome) * 100).toFixed(0)
-      : 0;
+  if (isNaN(amount) || amount <= 0) {
+    alert("Proszę wprowadzić kwotę.");
+    return;
+  }
 
-    const expenseColor = "#FF4D4D";
-    const incomeColor = "#2e8b57 ";
-    const percentageColor = document.body.classList.contains("dark-mode")
-      ? "#ffffff"
-      : "#333333";
+  if (!description) {
+    alert("Proszę dodać opis.");
+    return;
+  }
 
-    ctx.save();
-    ctx.clearRect(0, 0, width, height);
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.font = "bold 3em Segoe UI";
+  const type = expenseButton.classList.contains("active")
+    ? "expense"
+    : "income";
+  const icon = transactionIcon.value;
+  const date = document
+    .querySelector(".date-display")
+    .getAttribute("data-date");
 
-    ctx.fillStyle = percentageColor;
-    const centerX = width / 2;
-    const centerY = height / 2;
-    ctx.fillText(percentageUsed + "%", centerX, centerY - 10);
+  const transactionData = {
+    amount: amount.toFixed(2),
+    type: type,
+    icon: icon,
+    description: description,
+    date: date,
+  };
 
-    ctx.font = "1.4em Segoe UI";
+  if (index) {
+    transactions[index] = transactionData;
+  } else {
+    transactions.push(transactionData);
+  }
 
-    ctx.fillStyle = expenseColor;
-    ctx.fillText(totalExpense.toFixed(2) + " PLN", centerX, centerY + 30);
+  updateUI();
+  saveTransactions();
+  closeTransactionModal();
 
-    ctx.font = "1.1em Segoe UI";
-    ctx.fillStyle = incomeColor;
-    ctx.fillText(totalIncome.toFixed(2) + " PLN", centerX, centerY + 60);
-
-    ctx.restore();
-  },
-});
-
-function createLegend(groupedTransactions, chart) {
-  const legendContainer = document.getElementById("chart-legend");
-  legendContainer.innerHTML = "";
-
-  Object.values(groupedTransactions).forEach((transaction, index) => {
-    const categoryIconPath = Object.keys(categoryNames).find(
-      (key) => categoryNames[key] === transaction.category
-    );
-
-    const legendItem = document.createElement("div");
-    legendItem.classList.add("legend-item");
-
-    legendItem.innerHTML = `
-  <div class="legend-icon">
-    <img src="${categoryIconPath}" alt="${transaction.category}" />
-  </div>
-  <div class="legend-details">
-    <span class="legend-category">${transaction.category}</span>
-    <span>${transaction.count} ${
-      transaction.count === 1 ? "Transaction" : "Transactions"
-    }</span>
-    <span>${transaction.amount.toFixed(2)} PLN</span>
-  </div>
-`;
-
-    legendContainer.appendChild(legendItem);
-
-    let isHidden = false;
-
-    legendItem.addEventListener("click", function () {
-      const categoryIndex = chart.data.labels.indexOf(transaction.category);
-
-      isHidden = !isHidden;
-      chart.getDatasetMeta(0).data[categoryIndex].hidden = isHidden;
-
-      if (isHidden) {
-        legendItem.classList.add("strike-through");
-      } else {
-        legendItem.classList.remove("strike-through");
-      }
-
-      chart.update();
-    });
-  });
+  const activeFilter = document
+    .querySelector(".wallet-button.active")
+    .classList[1].replace("-button", "");
+  filterTransactions(activeFilter);
+  updateChart();
 }
 
 function updateChart() {
-  const ctx = document.getElementById("expense-chart").getContext("2d");
+  const ctx = document.querySelector(".expense-chart").getContext("2d");
 
   if (chartInstance) {
     chartInstance.destroy();
@@ -498,6 +477,13 @@ function updateChart() {
     (t) => t.type === "income"
   );
 
+  const totalIncome = incomeData.reduce((sum, t) => sum + t.amount, 0);
+  const totalExpense = expenseData.reduce((sum, t) => sum + t.amount, 0);
+
+  const percentageUsed = totalIncome
+    ? ((totalExpense / totalIncome) * 100).toFixed(0)
+    : 0;
+
   const allCategories = [
     ...expenseData.map((t) => t.category),
     ...incomeData.map((t) => t.category),
@@ -508,20 +494,20 @@ function updateChart() {
   ];
 
   const colors = {
-    Food: "#FF6666",
-    Shopping: "#FF9999",
-    Car: "#FF8080",
-    Rent: "#FFB3B3",
-    Health: "#FF4D4D",
-    Education: "#FF1A1A",
-    Entertainment: "#FFA6A6",
-    Fuel: "#FFCCCC",
-    Bills: "#FF5252",
-    Salary: "#99FF99",
-    Bonus: "#66FF66",
-    "Savings Account": "#80FF80",
-    Investment: "#4DFF4D",
-    Inheritance: "#33FF33",
+    Jedzenie: "#FF6666",
+    Zakupy: "#FF9999",
+    Samochód: "#FF8080",
+    Czynsz: "#FFB3B3",
+    Zdrowie: "#FF4D4D",
+    Edukacja: "#FF1A1A",
+    Rozrywka: "#FFA6A6",
+    Paliwo: "#FFCCCC",
+    Rachunki: "#FF5252",
+    Wynagrodzenie: "#99FF99",
+    Premia: "#66FF66",
+    "Konto Oszczędnościowe": "#80FF80",
+    Inwestycja: "#4DFF4D",
+    Spadek: "#33FF33",
   };
 
   const allColors = allCategories.map((category) => colors[category]);
@@ -559,234 +545,98 @@ function updateChart() {
     expenseData: expenseData,
   });
 
+  // Dodanie tekstu w środku wykresu (procenty, wydatki, przychody)
+  Chart.register({
+    id: "centerTextPlugin",
+    beforeDraw: function (chart) {
+      const ctx = chart.ctx;
+      const width = chart.width;
+      const height = chart.height;
+
+      const percentageColor = document.body.classList.contains("dark-mode")
+        ? "#ffffff"
+        : "#333333";
+
+      const centerX = width / 2;
+      const centerY = height / 2;
+
+      ctx.save();
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.clearRect(0, 0, width, height);
+
+      // Wyświetlanie procentów
+      ctx.font = "bold 3em Segoe UI";
+      ctx.fillStyle = percentageColor;
+      ctx.fillText(percentageUsed + "%", centerX, centerY - 10);
+
+      // Wyświetlanie wydatków
+      ctx.font = "1.4em Segoe UI";
+      ctx.fillStyle = "#FF4D4D";
+      ctx.fillText(totalExpense.toFixed(2) + " PLN", centerX, centerY + 30);
+
+      // Wyświetlanie przychodów
+      ctx.font = "1.1em Segoe UI";
+      ctx.fillStyle = "#2e8b57";
+      ctx.fillText(totalIncome.toFixed(2) + " PLN", centerX, centerY + 60);
+
+      ctx.restore();
+    },
+  });
+
   createLegend(groupedTransactions, chartInstance);
 }
-document;
 
-function filterTransactions(type) {
-  const transactionList = document.getElementById("wallet-transaction-list");
-  transactionList.innerHTML = "";
+function createLegend(groupedTransactions, chart) {
+  const legendContainer = document.querySelector(".chart-legend");
+  legendContainer.innerHTML = "";
 
-  const filteredTransactions =
-    type === "all"
-      ? transactions
-      : transactions.filter((transaction) => transaction.type === type);
+  Object.values(groupedTransactions).forEach((transaction, index) => {
+    const categoryIconPath = Object.keys(categoryNames).find(
+      (key) => categoryNames[key] === transaction.category
+    );
 
-  const sortedTransactions = filteredTransactions.sort((a, b) => {
-    const dateA = new Date(a.date);
-    const dateB = new Date(b.date);
-    return dateB - dateA;
-  });
+    const legendItem = document.createElement("div");
+    legendItem.classList.add("legend-item");
 
-  let lastDate = null;
-
-  sortedTransactions.forEach((transaction, index) => {
-    const currentDate = transaction.date;
-
-    if (currentDate !== lastDate) {
-      const dateHeader = document.createElement("div");
-      dateHeader.classList.add("transaction-date-header");
-
-      const formattedDate = formatDateForDisplay(currentDate);
-      dateHeader.innerText = formattedDate;
-
-      transactionList.appendChild(dateHeader);
-      lastDate = currentDate;
-    }
-
-    const listItem = document.createElement("li");
-    listItem.classList.add("transaction-item");
-
-    const amountClass =
-      transaction.type === "income" ? "income-amount" : "expense-amount";
-
-    listItem.innerHTML = `
-      <div class="transaction-details">
-        <img src="${transaction.icon}" alt="Ikona" class="icon" />
-        <div class="transaction-info">
-          <span>${transaction.description}</span>
-        </div>
+    legendItem.innerHTML = `
+      <div class="legend-icon">
+        <img src="${categoryIconPath}" alt="${transaction.category}" />
       </div>
-      <span class="transaction-amount ${amountClass}">${transaction.amount} PLN</span>
-      <div class="actions">
-        <i class="fas fa-edit" onclick="editTransaction(${index})"></i>
-        <i class="fas fa-trash-alt" onclick="deleteTransaction(${index})"></i>
+      <div class="legend-details">
+        <span class="legend-category">${transaction.category}</span>
+        <span>${transaction.count} ${
+      transaction.count === 1 ? "Transaction" : "Transactions"
+    }</span>
+        <span>${transaction.amount.toFixed(2)} PLN</span>
       </div>
     `;
-    transactionList.appendChild(listItem);
+
+    legendContainer.appendChild(legendItem);
+
+    let isHidden = false;
+
+    legendItem.addEventListener("click", function () {
+      const categoryIndex = chart.data.labels.indexOf(transaction.category);
+
+      isHidden = !isHidden;
+      chart.getDatasetMeta(0).data[categoryIndex].hidden = isHidden;
+
+      if (isHidden) {
+        legendItem.classList.add("strike-through");
+      } else {
+        legendItem.classList.remove("strike-through");
+      }
+
+      chart.update();
+    });
   });
-}
-
-function formatDateForDisplay(isoDate) {
-  const date = new Date(isoDate);
-  const options = {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    weekday: "long",
-  };
-  return date.toLocaleDateString("pl-PL", options);
-}
-
-function handleKeyClick(event) {
-  const key = event.target.innerText;
-  const currentAmount = transactionAmountDisplay.innerText;
-
-  if (key === "C") {
-    transactionAmountDisplay.innerText = "0.00";
-  } else if (key === "←") {
-    transactionAmountDisplay.innerText = currentAmount.slice(0, -1) || "0";
-  } else if (key === "✔") {
-    handleTransactionSubmit(event);
-  } else {
-    if (currentAmount === "0.00" && key !== ".") {
-      transactionAmountDisplay.innerText = key;
-    } else {
-      transactionAmountDisplay.innerText = currentAmount + key;
-    }
-  }
-}
-
-document.addEventListener("keydown", function (event) {
-  const isDescriptionFocused =
-    document.activeElement ===
-    document.getElementById("transaction-description");
-
-  if (!isDescriptionFocused) {
-    if (!isNaN(event.key) || event.key === ".") {
-      event.preventDefault();
-      handleKeyClick({ target: { innerText: event.key } });
-    } else if (event.key === "Enter") {
-      handleTransactionSubmit(event);
-    } else if (event.key === "Backspace") {
-      event.preventDefault();
-      handleKeyClick({ target: { innerText: "←" } });
-    }
-  }
-});
-document.querySelectorAll(".key").forEach((key) => {
-  key.addEventListener("click", handleKeyClick);
-});
-
-function filterTransactions(type) {
-  const transactionList = document.getElementById("wallet-transaction-list");
-  transactionList.innerHTML = "";
-
-  const filteredTransactions =
-    type === "all"
-      ? transactions
-      : transactions.filter((transaction) => transaction.type === type);
-
-  const sortedTransactions = filteredTransactions.sort((a, b) => {
-    const dateA = new Date(a.date);
-    const dateB = new Date(b.date);
-    return dateB - dateA;
-  });
-
-  let lastDate = null;
-
-  sortedTransactions.forEach((transaction, index) => {
-    const currentDate = transaction.date;
-
-    if (currentDate !== lastDate) {
-      const dateHeader = document.createElement("div");
-      dateHeader.classList.add("transaction-date-header");
-      dateHeader.innerText = currentDate;
-      transactionList.appendChild(dateHeader);
-      lastDate = currentDate;
-    }
-
-    const listItem = document.createElement("li");
-    listItem.classList.add("transaction-item");
-
-    const amountClass =
-      transaction.type === "income" ? "income-amount" : "expense-amount";
-
-    listItem.innerHTML = `
-      <div class="transaction-details">
-        <img src="${transaction.icon}" alt="Ikona" class="icon" />
-        <div class="transaction-info">
-          <span>${transaction.description}</span>
-        </div>
-      </div>
-      <span class="transaction-amount ${amountClass}">${transaction.amount} PLN</span>
-      <div class="actions">
-        <i class="fas fa-edit" onclick="editTransaction(${index})"></i>
-        <i class="fas fa-trash-alt" onclick="deleteTransaction(${index})"></i>
-      </div>
-    `;
-    transactionList.appendChild(listItem);
-  });
-}
-
-function addTransaction() {
-  const amount = parseFloat(transactionAmountDisplay.innerText);
-  const description = transactionDescription.value.trim();
-
-  if (isNaN(amount) || amount <= 0) {
-    alert("Proszę wprowadzić kwotę.");
-    return;
-  }
-
-  if (!description) {
-    alert("Proszę dodać opis.");
-    return;
-  }
-
-  const type = expenseButton.classList.contains("active")
-    ? "expense"
-    : "income";
-  const icon = transactionIcon.value;
-
-  const date = document
-    .querySelector(".date-display")
-    .getAttribute("data-date");
-
-  const transactionData = {
-    amount: amount.toFixed(2),
-    type: type,
-    icon: icon,
-    description: description,
-    date: date,
-  };
-
-  transactions.push(transactionData);
-  updateUI();
-  saveTransactions();
-  closeTransactionModal();
-
-  const activeFilter = document
-    .querySelector(".wallet-button.active")
-    .id.replace("-button", "");
-  filterTransactions(activeFilter);
-
-  updateChart();
-}
-
-document.getElementById("expense-button").addEventListener("click", () => {
-  filterTransactions("expense");
-  activateButton("expense-button");
-});
-document.getElementById("income-button").addEventListener("click", () => {
-  filterTransactions("income");
-  activateButton("income-button");
-});
-document.getElementById("all-button").addEventListener("click", () => {
-  filterTransactions("all");
-  activateButton("all-button");
-});
-
-function activateButton(buttonId) {
-  document.querySelectorAll(".wallet-button").forEach((button) => {
-    button.classList.remove("active");
-  });
-  document.getElementById(buttonId).classList.add("active");
 }
 
 const themeToggle = document.querySelector(".theme-toggle");
 const bodyClassList = document.body.classList;
-const sunnyIcon = document.getElementById("sunny");
-const moonIcon = document.getElementById("moon");
+const sunnyIcon = document.querySelector(".sunny");
+const moonIcon = document.querySelector(".moon");
 
 themeToggle.addEventListener("click", () => {
   if (bodyClassList.contains("dark-mode")) {
@@ -840,4 +690,65 @@ function setThemePreference() {
     }
   }
   updateChart();
+}
+
+document.addEventListener("keydown", function (event) {
+  const isDescriptionFocused =
+    document.activeElement ===
+    document.querySelector(".transaction-description");
+
+  if (!isDescriptionFocused) {
+    if (!isNaN(event.key) || event.key === ".") {
+      event.preventDefault();
+      handleKeyClick({ target: { innerText: event.key } });
+    } else if (event.key === "Enter") {
+      handleTransactionSubmit(event);
+    } else if (event.key === "Backspace") {
+      event.preventDefault();
+      handleKeyClick({ target: { innerText: "←" } });
+    }
+  }
+});
+
+document.querySelectorAll(".key").forEach((key) => {
+  key.addEventListener("click", handleKeyClick);
+});
+
+function handleKeyClick(event) {
+  const key = event.target.innerText;
+  const currentAmount = transactionAmountDisplay.innerText;
+
+  if (key === "C") {
+    transactionAmountDisplay.innerText = "0.00";
+  } else if (key === "←") {
+    transactionAmountDisplay.innerText = currentAmount.slice(0, -1) || "0";
+  } else if (key === "✔") {
+    handleTransactionSubmit(event);
+  } else {
+    if (currentAmount === "0.00" && key !== ".") {
+      transactionAmountDisplay.innerText = key;
+    } else {
+      transactionAmountDisplay.innerText = currentAmount + key;
+    }
+  }
+}
+
+document.querySelector(".expense-button").addEventListener("click", () => {
+  filterTransactions("expense");
+  activateButton("expense-button");
+});
+document.querySelector(".income-button").addEventListener("click", () => {
+  filterTransactions("income");
+  activateButton("income-button");
+});
+document.querySelector(".all-button").addEventListener("click", () => {
+  filterTransactions("all");
+  activateButton("all-button");
+});
+
+function activateButton(buttonClass) {
+  document.querySelectorAll(".wallet-button").forEach((button) => {
+    button.classList.remove("active");
+  });
+  document.querySelector(`.${buttonClass}`).classList.add("active");
 }
